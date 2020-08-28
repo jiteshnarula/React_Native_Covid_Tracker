@@ -6,7 +6,7 @@ export const lightColorTheme = {
 };
 export const darkColorTheme = {
   primary: '#37474f',
-  secondary: '#000000',
+  secondary: '#ffffff',
   statusBarColor: '#263238',
   selectedColor: '#28A745',
 };

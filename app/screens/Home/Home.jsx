@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
 import ListItem from '../../components/ListItem';
 import GlobalCss from '../../config/globalcss';
+import RenderSwitch from '../../components/Form/RenderSwitch';
+import { getAsyncData } from '../../components/CommonFunctions';
+import { connect } from 'react-redux';
 
 const Home = () => {
   return (
@@ -9,9 +12,16 @@ const Home = () => {
       <ListItem
         title="Theme"
         textStyle={GlobalCss.mediumTextRegular}
+        right={true}
+        rightComponent={<RenderSwitch />}
       />
     </View>
   );
 };
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    theme: state.themeReducer.theme,
+  };
+};
+export default connect(mapStateToProps)(Home);

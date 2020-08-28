@@ -1,19 +1,21 @@
 import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { lightColorTheme } from './theme';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: lightColorTheme.secondary,
   },
   smallTextRegular: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'ubuntu-regular',
   },
   smallTextMedium: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'ubuntu-medium',
   },
   smallTextBold: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'ubuntu-bold',
   },
   mediumTextRegular: {

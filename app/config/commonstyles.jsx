@@ -1,14 +1,21 @@
 import { lightColorTheme, darkColorTheme } from './theme';
 import GlobalCSS from './globalcss';
 
-export const header = {
-  headerStyle: {
-    backgroundColor: lightColorTheme.primary,
-    height: 65,
-  },
-  headerTitleAlign: 'center',
-  headerTitleStyle: {
-    color: lightColorTheme.secondary,
-    ...GlobalCSS.mediumTexRegular,
-  },
+export const header = theme => {
+  console.log(theme);
+  return {
+    headerStyle: {
+      backgroundColor: theme
+        ? darkColorTheme.primary
+        : lightColorTheme.primary,
+      height: 65,
+    },
+    headerTitleAlign: 'center',
+    headerTitleStyle: {
+      color: theme
+        ? darkColorTheme.secondary
+        : lightColorTheme.secondary,
+      ...GlobalCSS.mediumTexRegular,
+    },
+  };
 };

@@ -5,16 +5,11 @@ import AppText from './Form/AppText';
 import GlobalCSS from '../config/globalcss';
 import RenderSwitch from './Form/RenderSwitch';
 
-const ListItem = ({
-  title,
-  textStyle,
-  switchValue,
-  setSwitchValue,
-}) => {
+const ListItem = ({ title, textStyle, right, rightComponent }) => {
   return (
     <View style={styles.container}>
       <AppText title={title} style={textStyle} />
-      <RenderSwitch />
+      {right ? rightComponent : null}
     </View>
   );
 };

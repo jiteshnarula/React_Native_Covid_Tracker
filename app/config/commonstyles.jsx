@@ -2,7 +2,6 @@ import { lightColorTheme, darkColorTheme } from './theme';
 import GlobalCSS from './globalcss';
 
 export const header = theme => {
-  console.log(theme);
   return {
     headerStyle: {
       backgroundColor: theme

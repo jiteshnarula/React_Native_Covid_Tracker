@@ -3,6 +3,12 @@ export const lightColorTheme = {
   secondary: '#ffffff',
   statusBarColor: '#0277bd',
   selectedColor: '#28A745',
+  blackColor: '#000000',
+  confirmedCasesColor: '#ff073a',
+  activeCasesColor: '#007bff',
+  recoveredColor: '#28a745',
+  deathsColor: '#6c757d',
+  testedColor: '#ff0fbf',
 };
 export const darkColorTheme = {
   primary: '#37474f',

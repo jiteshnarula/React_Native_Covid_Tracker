@@ -6,6 +6,18 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: lightColorTheme.secondary,
   },
+  extraSmallTextRegular: {
+    fontSize: 14,
+    fontFamily: 'ubuntu-regular',
+  },
+  extraSmallTextMedium: {
+    fontSize: 14,
+    fontFamily: 'ubuntu-medium',
+  },
+  extraSmallTextBold: {
+    fontSize: 14,
+    fontFamily: 'ubuntu-bold',
+  },
   smallTextRegular: {
     fontSize: 16,
     fontFamily: 'ubuntu-regular',
@@ -19,15 +31,15 @@ export default StyleSheet.create({
     fontFamily: 'ubuntu-bold',
   },
   mediumTextRegular: {
-    fontSize: 22,
+    fontSize: 19,
     fontFamily: 'ubuntu-regular',
   },
   mediumTextMedium: {
-    fontSize: 22,
+    fontSize: 19,
     fontFamily: 'ubuntu-medium',
   },
   mediumTextBold: {
-    fontSize: 22,
+    fontSize: 19,
     fontFamily: 'ubuntu-bold',
   },
   largeTextRegular: {

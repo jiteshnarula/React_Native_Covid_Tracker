@@ -26,20 +26,31 @@ const RenderSwitch = props => {
       disabled={false}
       activeText={'Dark'}
       inActiveText={'Light'}
-      activeTextStyle={GlobalCSS.smallTextRegular}
-      inactiveTextStyle={GlobalCSS.smallTextRegular}
+      activeTextStyle={GlobalCSS.extraSmallTextRegular}
+      inactiveTextStyle={GlobalCSS.extraSmallTextRegular}
       backgroundActive={darkColorTheme.primary}
       backgroundInactive={lightColorTheme.primary}
       circleActiveColor={darkColorTheme.statusBarColor}
       circleInActiveColor={lightColorTheme.statusBarColor}
       changeValueImmediately={true}
       useNativeDriver={false}
+      containerStyle={{
+        borderWidth: 1,
+        borderColor: theme
+          ? darkColorTheme.secondary
+          : lightColorTheme.blackColor,
+      }}
+      innerCircleStyle={{
+        borderWidth: 1,
+        borderColor: theme
+          ? darkColorTheme.secondary
+          : lightColorTheme.blackColor,
+      }}
     />
   );
 };
 
 const mapStateToProps = state => {
-  console.log('updated state', state);
   return { theme: state.themeReducer.theme };
 };
 

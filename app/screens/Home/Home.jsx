@@ -8,8 +8,60 @@ import { connect } from 'react-redux';
 import { darkColorTheme, lightColorTheme } from '../../config/theme';
 import AppText from '../../components/Form/AppText';
 import Card from '../../components/Card';
+import listingApi from '../../api/listings';
+import CustomTable from '../../components/CustomTable';
+import { stateCodes } from '../../contants/statecode';
 
 const Home = ({ theme }) => {
+  const [listings, setListings] = useState([]);
+  const [tableData, setTableData] = useState([]);
+
+  const tableHead = [
+    'State/U.T.',
+    'Confirmed',
+    'Recovered',
+    'Deaths',
+    'Tested',
+  ];
+  const childTableHead = [
+    'Districts',
+    'Confirmed',
+    'Recovered',
+    'Deaths',
+    'Tested',
+  ];
+  useEffect(() => {
+    loadListing();
+  }, []);
+
+  const loadListing = async () => {
+    const response = await listingApi.getListings();
+    setListings(response);
+    // Object.keys(listings['data']['AP']['districts']),
+    const tableArray = [];
+    stateCodes.map(data => {
+      // console.log(listings['data']['AR']['districts']);
+      const tempArr = [];
+      const stateObj = listings['data'][data.sc]['total'];
+      console.log(stateObj);
+      if (stateObj && Object.keys(stateObj).length > 0) {
+        tempArr.push(data.sn);
+        tempArr.push(stateObj['confirmed']);
+        tempArr.push(stateObj['deceased']);
+        tempArr.push(stateObj['recovered']);
+        tempArr.push(stateObj['tested']);
+        tableArray.push(tempArr);
+      } else {
+        console.log('Not found anything');
+      }
+    });
+    setTableData(tableArray);
+    // const map = new Map(listings);
+    // console.log(
+    //   'ressponsecoming from data.json',
+    //   listings['data']['AP']['districts'],
+    // );
+  };
   return (
     <View
       style={[
@@ -171,6 +223,8 @@ const Home = ({ theme }) => {
           </View>
         }
       />
+      {/* TODO: Table Component */}
+      <CustomTable tableHead={tableHead} tableData={tableData} />
     </View>
   );
 };

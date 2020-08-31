@@ -9,6 +9,8 @@ export const lightColorTheme = {
   recoveredColor: '#28a745',
   deathsColor: '#6c757d',
   testedColor: '#ff0fbf',
+  tableHeaderBorderColor: '#c8e1ff',
+  tableHeaderBackgroundColor: '#f1f8ff',
 };
 export const darkColorTheme = {
   primary: '#37474f',

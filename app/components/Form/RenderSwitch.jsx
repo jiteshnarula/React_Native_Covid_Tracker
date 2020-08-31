@@ -13,7 +13,6 @@ import {
 
 const RenderSwitch = props => {
   const { theme, changeTheme } = props;
-  const [switchValue, setSwitchValue] = useState(false);
   const handleSwitch = () => {
     // if (switchValue) saveAsyncData('theme', 'light');
     // else saveAsyncData('theme', 'dark');

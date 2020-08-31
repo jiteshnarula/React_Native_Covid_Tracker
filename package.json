@@ -14,6 +14,8 @@
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
+    "accordion-collapse-react-native": "^0.3.2",
+    "apisauce": "^1.1.2",
     "expo": "^38.0.9",
     "expo-status-bar": "^1.0.2",
     "react": "~16.11.0",
@@ -24,6 +26,7 @@
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
     "react-native-switch": "^2.0.0",
+    "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5"

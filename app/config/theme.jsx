@@ -11,6 +11,7 @@ export const lightColorTheme = {
   testedColor: '#ff0fbf',
   tableHeaderBorderColor: '#c8e1ff',
   tableHeaderBackgroundColor: '#f1f8ff',
+  lightPrimary: '#9adbfe',
 };
 export const darkColorTheme = {
   primary: '#37474f',

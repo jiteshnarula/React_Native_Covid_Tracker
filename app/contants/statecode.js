@@ -7,7 +7,7 @@ export const stateCodes = [
   { sc: 'CH', sn: 'Chandigarh' },
   { sc: 'CT', sn: 'Chhattisgarh' },
   { sc: 'DL', sn: 'Delhi' },
-  { sc: 'DN', sn: 'Dadra and Nagar Haveli and Daman and Diu' },
+  { sc: 'DN', sn: 'Dadra Nagar Haveli, Daman and Diu' },
   { sc: 'GA', sn: 'Goa' },
   { sc: 'GJ', sn: 'Gujrat' },
   { sc: 'HP', sn: 'Himachal Pradesh' },

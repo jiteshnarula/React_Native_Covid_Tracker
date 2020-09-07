@@ -14,7 +14,7 @@ export const header = theme => {
       color: theme
         ? darkColorTheme.secondary
         : lightColorTheme.secondary,
-      ...GlobalCSS.mediumTexRegular,
+      ...GlobalCSS.mediumTextRegular,
     },
   };
 };

@@ -1,27 +1,104 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  Platform,
+  TouchableOpacity,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { Table, Row, Rows, Cell } from 'react-native-table-component';
-import { lightColorTheme } from '../config/theme';
+import { lightColorTheme, darkColorTheme } from '../config/theme';
 import GlobalCSS from '../config/globalcss';
 import { connect } from 'react-redux';
 import AppText from './Form/AppText';
 import { Entypo } from '@expo/vector-icons';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import {
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-} from 'react-native-gesture-handler';
-import AppModal from './AppModal';
 
-const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
+import AppModal from './AppModal';
+import {
+  screenWidth,
+  screenHeight,
+} from '../contants/widthandheight';
+import { numberWithCommas } from './CommonFunctions';
+
+const CustomTable = ({
+  tableHead,
+  tableData,
+  widthArr,
+  listing,
+  theme,
+}) => {
   const [showModal, setShowModal] = useState(false);
+  const [stateName, setStateName] = useState(false);
+  const [districts, setDistricts] = useState([]);
+  const [population, setPopulation] = useState('');
+  const [notes, setNotes] = useState('');
+  const districtTableHead = [
+    'Districts',
+    'Active',
+    'Confirmed',
+    'Recovered',
+    'Deaths',
+    'Tested',
+  ];
   const handleRowDataClick = rowData => {
-    setShowModal(false);
+    const districtDetails = [];
+    setStateName(rowData[0]);
+    setNotes(
+      listing[rowData[6]]['meta']['notes']
+        ? listing[rowData[6]]['meta']['notes']
+        : undefined,
+    );
+    setPopulation(
+      listing[rowData[6]]['meta']['population']
+        ? listing[rowData[6]]['meta']['population']
+        : undefined,
+    );
+    if (Object.keys(listing[rowData[6]]['districts']).length > 0) {
+      Object.keys(listing[rowData[6]]['districts']).map(data => {
+        const districtObj =
+          listing[rowData[6]]['districts'][data]['total'];
+        const activeCases =
+          (districtObj['confirmed'] ? districtObj['confirmed'] : 0) -
+          (districtObj['recovered'] ? districtObj['recovered'] : 0)-
+          (districtObj['deceased'] ? districtObj['deceased'] : 0);
+        const tempArr = [];
+        tempArr.push(data);
+        tempArr.push(
+          activeCases <= 0 ? '-' : numberWithCommas(activeCases),
+        );
+        tempArr.push(
+          districtObj['confirmed'] > 0
+            ? numberWithCommas(districtObj['confirmed'])
+            : '-',
+        );
+        tempArr.push(
+          districtObj['recovered'] > 0
+            ? numberWithCommas(districtObj['recovered'])
+            : '-',
+        );
+        tempArr.push(
+          districtObj['deceased'] > 0
+            ? numberWithCommas(districtObj['deceased'])
+            : '-',
+        );
+        tempArr.push(
+          districtObj['tested'] > 0
+            ? numberWithCommas(districtObj['tested'])
+            : '-',
+        );
+        districtDetails.push(tempArr);
+      });
+      setDistricts(districtDetails);
+    } else {
+      console.log('Something went wrong');
+    }
+    setShowModal(true);
   };
+
   const element = data => {
     let tempArr = [];
     for (let i = 0; i < data.length; i++) {
@@ -31,7 +108,11 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             title={data[0]}
             style={[
               styles.tableDataStyle,
-              lightColorTheme.blackColor,
+              {
+                color: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.blackColor,
+              },
             ]}
           />,
         );
@@ -52,7 +133,7 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             title={data[2]}
             style={[
               styles.tableDataStyle,
-              { color: lightColorTheme.recoveredColor },
+              { color: lightColorTheme.yellowColor },
             ]}
           />,
         );
@@ -62,7 +143,7 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             title={data[3]}
             style={[
               styles.tableDataStyle,
-              { color: lightColorTheme.deathsColor },
+              { color: lightColorTheme.recoveredColor },
             ]}
           />,
         );
@@ -70,6 +151,20 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
         tempArr.push(
           <AppText
             title={data[4]}
+            style={[
+              styles.tableDataStyle,
+              {
+                color: theme
+                  ? darkColorTheme.lightWhite
+                  : lightColorTheme.deathsColor,
+              },
+            ]}
+          />,
+        );
+      if (i === 5)
+        tempArr.push(
+          <AppText
+            title={data[5]}
             style={[
               styles.tableDataStyle,
               { color: lightColorTheme.testedColor },
@@ -84,7 +179,17 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
     for (let i = 0; i < thData.length; i++) {
       if (i === 0) {
         tempArr.push(
-          <AppText title={thData[0]} style={styles.tableHeadStyle} />,
+          <AppText
+            title={thData[0]}
+            style={[
+              styles.tableHeadStyle,
+              {
+                color: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.blackColor,
+              },
+            ]}
+          />,
         );
       }
       if (i === 1) {
@@ -107,7 +212,7 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             style={[
               styles.tableHeadStyle,
               {
-                color: lightColorTheme.recoveredColor,
+                color: lightColorTheme.yellowColor,
               },
             ]}
           />,
@@ -120,7 +225,7 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             style={[
               styles.tableHeadStyle,
               {
-                color: lightColorTheme.deathsColor,
+                color: lightColorTheme.recoveredColor,
               },
             ]}
           />,
@@ -130,6 +235,21 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
         tempArr.push(
           <AppText
             title={thData[4]}
+            style={[
+              styles.tableHeadStyle,
+              {
+                color: theme
+                  ? darkColorTheme.lightWhite
+                  : lightColorTheme.deathsColor,
+              },
+            ]}
+          />,
+        );
+      }
+      if (i === 5) {
+        tempArr.push(
+          <AppText
+            title={thData[5]}
             style={[
               styles.tableHeadStyle,
               {
@@ -143,17 +263,221 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
     return tempArr;
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme
+            ? darkColorTheme.primary
+            : lightColorTheme.secondary,
+        },
+      ]}
+    >
       <AppModal isVisible={showModal}>
-        <View>
-          <View style={styles.crossContainer}>
-            <Entypo
-              name="cross"
-              size={30}
-              color="black"
+        <View style={styles.modalContainer}>
+          <View
+            style={[
+              styles.modalContent,
+              {
+                borderColor: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.primary,
+              },
+              {
+                backgroundColor: theme
+                  ? darkColorTheme.primary
+                  : lightColorTheme.secondary,
+              },
+            ]}
+          >
+            <View>
+              <TouchableWithoutFeedback
+                onPress={() => setShowModal(false)}
+              >
+                <View
+                  style={[
+                    styles.topBar,
+                    {
+                      backgroundColor: theme
+                        ? darkColorTheme.primary
+                        : lightColorTheme.primary,
+                    },
+                  ]}
+                >
+                  <View>
+                    <Entypo
+                      name="squared-cross"
+                      size={30}
+                      color={lightColorTheme.confirmedCasesColor}
+                      style={styles.crossContainer}
+                      onPress={() => setShowModal(false)}
+                    />
+                  </View>
+                  <View>
+                    <AppText
+                      title={stateName}
+                      style={[
+                        styles.stateName,
+                        {
+                          color: theme
+                            ? darkColorTheme.secondary
+                            : lightColorTheme.secondary,
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+            <View style={styles.notesContainer}>
+              {notes && (
+                <>
+                  <AppText
+                    title="Notes:"
+                    style={[
+                      styles.noteHeader,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.blackColor,
+                      },
+                    ]}
+                  />
+                  <AppText
+                    title={notes}
+                    style={[
+                      styles.noteContent,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.blackColor,
+                      },
+                    ]}
+                  />
+                </>
+              )}
+            </View>
+            <View style={styles.notesContainer}>
+              {population && (
+                <>
+                  <AppText
+                    title="Population:"
+                    style={[
+                      styles.noteHeader,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.blackColor,
+                      },
+                    ]}
+                  />
+                  <AppText
+                    title={numberWithCommas(population)}
+                    style={[
+                      styles.noteContent,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.blackColor,
+                      },
+                    ]}
+                  />
+                </>
+              )}
+            </View>
+            {/* table contaner */}
+            <View style={{ flex: 1 }}>
+              <ScrollView horizontal={true}>
+                <View style={{ marginBottom: 50 }}>
+                  <Table>
+                    <Row
+                      data={elementTableHead(districtTableHead)}
+                      textStyle={styles.text}
+                      widthArr={widthArr}
+                      style={[
+                        styles.header,
+                        {
+                          backgroundColor: theme
+                            ? darkColorTheme.primary
+                            : lightColorTheme.lightPrimary,
+                          borderTopWidth: 1,
+                          borderBottomWidth: 1,
+                          borderTopColor: theme
+                            ? darkColorTheme.secondary
+                            : lightColorTheme.lightPrimary,
+                        },
+                      ]}
+                      key={districtTableHead}
+                    />
+                  </Table>
+                  <ScrollView style={styles.dataWrapper}>
+                    <Table
+                    // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
+                    >
+                      {districts.map((rowData, index) => (
+                        <Row
+                          key={index}
+                          style={[
+                            styles.row,
+                            index % 2
+                              ? {
+                                  backgroundColor: theme
+                                    ? darkColorTheme.statusBarColor
+                                    : '#F7F6E7',
+                                }
+                              : {
+                                  backgroundColor: theme
+                                    ? darkColorTheme.primary
+                                    : lightColorTheme.secondary,
+                                },
+                            index === 0 && {
+                              borderTopWidth: theme ? 1 : 0,
+                              borderTopColor: theme
+                                ? darkColorTheme.secondary
+                                : lightColorTheme.secondary,
+                            },
+                          ]}
+                          widthArr={widthArr}
+                          data={element(rowData)}
+                          textStyle={[styles.text]}
+                        />
+                      ))}
+                    </Table>
+                  </ScrollView>
+                </View>
+              </ScrollView>
+            </View>
+            <TouchableWithoutFeedback
               onPress={() => setShowModal(false)}
-            />
+            >
+              <View
+                style={[
+                  styles.buttonContainer,
+                  {
+                    borderColor: theme
+                      ? darkColorTheme.statusBarColor
+                      : lightColorTheme.statusBarColor,
+                  },
+                ]}
+              >
+                <AppText
+                  title="OK"
+                  style={[
+                    styles.buttonStyle,
+                    {
+                      color: theme
+                        ? darkColorTheme.secondary
+                        : lightColorTheme.primary,
+                      backgroundColor: theme
+                        ? darkColorTheme.primary
+                        : lightColorTheme.secondary,
+                    },
+                  ]}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
+          <View />
         </View>
       </AppModal>
       <ScrollView horizontal={true}>
@@ -165,10 +489,22 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
 
             <Row
               data={elementTableHead(tableHead)}
-              style={styles.headStyle}
               textStyle={styles.text}
               widthArr={widthArr}
-              style={styles.header}
+              style={[
+                styles.header,
+                {
+                  backgroundColor: theme
+                    ? darkColorTheme.primary
+                    : lightColorTheme.lightPrimary,
+                  borderWidth: 1,
+                  borderColor: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.lightPrimary,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                },
+              ]}
               key={tableHead}
             />
           </Table>
@@ -176,11 +512,6 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
             <Table
             // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
             >
-              {/* <Row
-              data={tableHead}
-              style={styles.headStyle}
-              textStyle={styles.text}
-            /> */}
               {tableData.map((rowData, index) => (
                 <TouchableHighlight
                   onPress={() => handleRowDataClick(rowData)}
@@ -189,7 +520,35 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
                   <Row
                     style={[
                       styles.row,
-                      index % 2 && { backgroundColor: '#F7F6E7' },
+                      index % 2
+                        ? {
+                            backgroundColor: theme
+                              ? darkColorTheme.statusBarColor
+                              : '#F7F6E7',
+                          }
+                        : {
+                            backgroundColor: theme
+                              ? darkColorTheme.primary
+                              : lightColorTheme.secondary,
+                          },
+                      {
+                        borderLeftWidth: 1,
+                        borderLeftColor: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.lightPrimary,
+                        borderRightWidth: 1,
+                        borderRightColor: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.lightPrimary,
+                      },
+                      index === tableData.length - 1 && {
+                        borderBottomWidth: 1,
+                        borderBottomColor: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.lightPrimary,
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10,
+                      },
                     ]}
                     widthArr={widthArr}
                     data={element(rowData)}
@@ -208,8 +567,9 @@ const CustomTable = ({ tableHead, tableData, widthArr, listing }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    marginHorizontal: 7,
     paddingTop: 30,
+    marginBottom: 23,
     backgroundColor: '#fff',
     // flex: 1,
     // padding: 5,
@@ -225,7 +585,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 50,
-    backgroundColor: lightColorTheme.lightPrimary,
   },
   dataWrapper: {
     marginTop: -1,
@@ -242,7 +601,55 @@ const styles = StyleSheet.create({
   crossContainer: {
     position: 'absolute',
     right: 0,
-    padding: 10,
+    top: 0,
+  },
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(125,125,125,0.8)',
+  },
+  modalContent: {
+    width: screenWidth - 20,
+    height: screenHeight - 60,
+    borderWidth: 2,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  stateName: {
+    textAlign: 'center',
+    ...GlobalCSS.mediumTextRegular,
+    padding: 5,
+  },
+  topBar: {
+    padding: 5,
+    justifyContent: 'center',
+  },
+  notesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 5,
+  },
+  noteHeader: {
+    ...GlobalCSS.extraSmallTextBold,
+  },
+  noteContent: {
+    ...GlobalCSS.extraSmallTextRegular,
+    marginLeft: 5,
+  },
+  buttonStyle: {
+    ...GlobalCSS.smallTextMedium,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 5,
+    right: 0,
+    marginRight: 40,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10,
   },
 });
 

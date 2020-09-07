@@ -11,46 +11,105 @@ import Card from '../../components/Card';
 import listingApi from '../../api/listings';
 import CustomTable from '../../components/CustomTable';
 import { stateCodes } from '../../contants/statecode';
+import {
+  numberWithCommas,
+  gettingTime,
+  gettingDate,
+} from '../../components/CommonFunctions';
+import XDate from 'xdate';
 
 const Home = ({ theme }) => {
   const [tableData, setTableData] = useState([]);
   const [listing, setListing] = useState([]);
+  const [totalActiveCases, setTotalActiveCases] = useState('');
+  const [totalConfirmedCases, setTotalConfirmedCases] = useState('');
+  const [totalRecoveredCases, setTotalRecoveredCases] = useState('');
+  const [totalTestedCases, setTotalTestedCases] = useState('');
+  const [lastUpdatedTimezone, setLastUpdatedTimezone] = useState('');
 
   const tableHead = [
     'State/U.T.',
+    'Active',
     'Confirmed',
     'Recovered',
     'Deaths',
     'Tested',
   ];
-  const childTableHead = [
-    'Districts',
-    'Confirmed',
-    'Recovered',
-    'Deaths',
-    'Tested',
-  ];
-  const widthArr = [140, 80, 80, 80, 80];
+  const widthArr = [140, 80, 80, 80, 80, 80];
   useEffect(() => {
     loadListing();
   }, []);
 
+  const findingUpdatedDate = date => {};
+
   const loadListing = async () => {
     const response = await listingApi.getListings();
-
     if (response.ok) {
       setListing(response.data);
       const tableArray = [];
+      let sumActive = 0;
+      let sumConfirmed = 0;
+      let sumRecovered = 0;
+      let sumTested = 0;
+      let temp = '';
+      let bool = false;
+      let lastUpdated;
+
       stateCodes.map(data => {
         const tempArr = [];
-        const tempDistrictArr = [];
         const stateObj = response['data'][data.sc]['total'];
+        const lastUpdatedObject = response['data'][data.sc]['meta'];
         if (stateObj && Object.keys(stateObj).length > 0) {
+          lastUpdated = lastUpdatedObject['last_updated'];
+
+          if (bool) {
+            if (new XDate(lastUpdated) > new XDate(temp)) {
+              temp = lastUpdated;
+            }
+          } else {
+            temp = lastUpdated;
+
+            bool = true;
+          }
+          const activeCases =
+            (stateObj['confirmed'] ? stateObj['confirmed'] : 0) -
+            (stateObj['recovered'] ? stateObj['recovered'] : 0) - (stateObj['deceased'] ? stateObj['deceased'] : 0);
+
+          sumActive += activeCases;
+
+          sumRecovered +=
+            stateObj['recovered'] > 0 ? stateObj['recovered'] : 0;
+
+          sumTested +=
+            stateObj['tested'] > 0 ? stateObj['tested'] : 0;
+
+          sumConfirmed +=
+            stateObj['confirmed'] > 0 ? stateObj['confirmed'] : 0;
+
           tempArr.push(data.sn);
-          tempArr.push(stateObj['confirmed']);
-          tempArr.push(stateObj['recovered']);
-          tempArr.push(stateObj['deceased']);
-          tempArr.push(stateObj['tested']);
+          tempArr.push(
+            activeCases > 0 ? numberWithCommas(activeCases) : '-',
+          );
+          tempArr.push(
+            stateObj['confirmed'] > 0
+              ? numberWithCommas(stateObj['confirmed'])
+              : '-',
+          );
+          tempArr.push(
+            stateObj['recovered'] > 0
+              ? numberWithCommas(stateObj['recovered'])
+              : '-',
+          );
+          tempArr.push(
+            stateObj['deceased'] > 0
+              ? numberWithCommas(stateObj['deceased'])
+              : '-',
+          );
+          tempArr.push(
+            stateObj['tested'] > 0
+              ? numberWithCommas(stateObj['tested'])
+              : '-',
+          );
           tempArr.push(data.sc);
           tableArray.push(tempArr);
         } else {
@@ -58,6 +117,12 @@ const Home = ({ theme }) => {
         }
       });
       setTableData(tableArray);
+      setTotalActiveCases(sumActive);
+      setTotalConfirmedCases(sumConfirmed);
+      setTotalRecoveredCases(sumRecovered);
+      setTotalTestedCases(sumTested);
+      console.log(temp);
+      setLastUpdatedTimezone(temp);
     }
   };
   return (
@@ -108,7 +173,7 @@ const Home = ({ theme }) => {
               ]}
             />
             <AppText
-              title="29-08-2020"
+              title={gettingDate(lastUpdatedTimezone)}
               style={[
                 GlobalCss.extraSmallTextRegular,
                 {
@@ -133,7 +198,7 @@ const Home = ({ theme }) => {
               ]}
             />
             <AppText
-              title="34,61,240"
+              title={numberWithCommas(totalConfirmedCases)}
               style={[
                 GlobalCss.smallTextRegular,
                 { color: lightColorTheme.confirmedCasesColor },
@@ -155,7 +220,7 @@ const Home = ({ theme }) => {
               ]}
             />
             <AppText
-              title="5:30 PM IST"
+              title={gettingTime(lastUpdatedTimezone)}
               style={[
                 GlobalCss.extraSmallTextRegular,
                 {
@@ -182,7 +247,7 @@ const Home = ({ theme }) => {
                   GlobalCss.smallTextRegular,
                   { color: lightColorTheme.activeCasesColor },
                 ]}
-                title="7,50,411"
+                title={numberWithCommas(totalActiveCases)}
               />
             </View>
             <View style={styles.middleContainer}>
@@ -198,7 +263,7 @@ const Home = ({ theme }) => {
                   GlobalCss.smallTextRegular,
                   { color: lightColorTheme.recoveredColor },
                 ]}
-                title="26,47,538"
+                title={numberWithCommas(totalRecoveredCases)}
               />
             </View>
 
@@ -215,7 +280,7 @@ const Home = ({ theme }) => {
                   GlobalCss.smallTextRegular,
                   { color: lightColorTheme.testedColor },
                 ]}
-                title="26,47,538"
+                title={numberWithCommas(totalTestedCases)}
               />
             </View>
           </View>

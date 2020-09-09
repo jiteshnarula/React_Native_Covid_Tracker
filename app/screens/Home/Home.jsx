@@ -39,12 +39,12 @@ const Home = ({ theme }) => {
   useEffect(() => {
     loadListing();
   }, []);
-
   const findingUpdatedDate = date => {};
 
   const loadListing = async () => {
-    const response = await listingApi.getListings();
-    if (response.ok) {
+    let response;
+    try {
+      response = await listingApi.getListings();
       setListing(response.data);
       const tableArray = [];
       let sumActive = 0;
@@ -54,26 +54,29 @@ const Home = ({ theme }) => {
       let temp = '';
       let bool = false;
       let lastUpdated;
+      let activeDeltaCases = 0;
 
       stateCodes.map(data => {
         const tempArr = [];
+        const commonObj = response['data'][data.sc];
         const stateObj = response['data'][data.sc]['total'];
+        const stateDeltaObject = response['data'][data.sc]['delta'];
         const lastUpdatedObject = response['data'][data.sc]['meta'];
         if (stateObj && Object.keys(stateObj).length > 0) {
           lastUpdated = lastUpdatedObject['last_updated'];
 
           if (bool) {
-            if (new XDate(lastUpdated) > new XDate(temp)) {
+            if (new Date(lastUpdated) > new Date(temp)) {
               temp = lastUpdated;
             }
           } else {
             temp = lastUpdated;
-
             bool = true;
           }
           const activeCases =
             (stateObj['confirmed'] ? stateObj['confirmed'] : 0) -
-            (stateObj['recovered'] ? stateObj['recovered'] : 0) - (stateObj['deceased'] ? stateObj['deceased'] : 0);
+            (stateObj['recovered'] ? stateObj['recovered'] : 0) -
+            (stateObj['deceased'] ? stateObj['deceased'] : 0);
 
           sumActive += activeCases;
 
@@ -111,6 +114,72 @@ const Home = ({ theme }) => {
               : '-',
           );
           tempArr.push(data.sc);
+
+          if ('delta' in commonObj) {
+            if (
+              'confirmed' in stateDeltaObject &&
+              'recovered' in stateDeltaObject &&
+              'deceased' in stateDeltaObject
+            ) {
+              activeDeltaCases =
+                (stateDeltaObject['confirmed']
+                  ? stateDeltaObject['confirmed']
+                  : 0) -
+                (stateDeltaObject['recovered']
+                  ? stateDeltaObject['recovered']
+                  : 0) -
+                (stateDeltaObject['deceased']
+                  ? stateDeltaObject['deceased']
+                  : 0);
+            } else {
+              activeDeltaCases = 0;
+            }
+            tempArr.push(
+              activeDeltaCases > 0 ? activeDeltaCases : '0',
+            );
+            if ('confirmed' in stateDeltaObject) {
+              tempArr.push(
+                stateDeltaObject['confirmed']
+                  ? stateDeltaObject['confirmed']
+                  : 0,
+              );
+            } else {
+              tempArr.push(0);
+            }
+            if ('recovered' in stateDeltaObject) {
+              tempArr.push(
+                stateDeltaObject['recovered']
+                  ? stateDeltaObject['recovered']
+                  : 0,
+              );
+            } else {
+              tempArr.push(0);
+            }
+            if ('deceased' in stateDeltaObject) {
+              tempArr.push(
+                stateDeltaObject['deceased']
+                  ? stateDeltaObject['deceased']
+                  : 0,
+              );
+            } else {
+              tempArr.push(0);
+            }
+            if ('tested' in stateDeltaObject) {
+              tempArr.push(
+                stateDeltaObject['tested']
+                  ? stateDeltaObject['tested']
+                  : 0,
+              );
+            } else {
+              tempArr.push(0);
+            }
+          } else {
+            tempArr.push(0);
+            tempArr.push(0);
+            tempArr.push(0);
+            tempArr.push(0);
+          }
+
           tableArray.push(tempArr);
         } else {
           console.log('Not found anything');
@@ -121,8 +190,10 @@ const Home = ({ theme }) => {
       setTotalConfirmedCases(sumConfirmed);
       setTotalRecoveredCases(sumRecovered);
       setTotalTestedCases(sumTested);
-      console.log(temp);
       setLastUpdatedTimezone(temp);
+    } catch (err) {
+      console.log('Something went wrong', err);
+      return;
     }
   };
   return (

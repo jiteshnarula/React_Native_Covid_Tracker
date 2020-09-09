@@ -59,12 +59,15 @@ const CustomTable = ({
     );
     if (Object.keys(listing[rowData[6]]['districts']).length > 0) {
       Object.keys(listing[rowData[6]]['districts']).map(data => {
+        const commonObj = listing[rowData[6]]['districts'][data];
         const districtObj =
           listing[rowData[6]]['districts'][data]['total'];
+
         const activeCases =
           (districtObj['confirmed'] ? districtObj['confirmed'] : 0) -
-          (districtObj['recovered'] ? districtObj['recovered'] : 0)-
+          (districtObj['recovered'] ? districtObj['recovered'] : 0) -
           (districtObj['deceased'] ? districtObj['deceased'] : 0);
+
         const tempArr = [];
         tempArr.push(data);
         tempArr.push(
@@ -90,6 +93,73 @@ const CustomTable = ({
             ? numberWithCommas(districtObj['tested'])
             : '-',
         );
+        tempArr.push(0);
+        let activeDeltaCases = 0;
+
+        if ('delta' in commonObj) {
+          const districtDeltaObj =
+            listing[rowData[6]]['districts'][data]['delta'];
+          if (
+            'confirmed' in districtDeltaObj &&
+            'recovered' in districtDeltaObj &&
+            'deceased' in districtDeltaObj
+          ) {
+            activeDeltaCases =
+              (districtDeltaObj['confirmed']
+                ? districtDeltaObj['confirmed']
+                : 0) -
+              (districtDeltaObj['recovered']
+                ? districtDeltaObj['recovered']
+                : 0) -
+              (districtDeltaObj['deceased']
+                ? districtDeltaObj['deceased']
+                : 0);
+          } else {
+            activeDeltaCases = 0;
+          }
+          tempArr.push(activeDeltaCases > 0 ? activeDeltaCases : 0);
+
+          if ('confirmed' in districtDeltaObj) {
+            tempArr.push(
+              districtDeltaObj['confirmed']
+                ? districtDeltaObj['confirmed']
+                : 0,
+            );
+          } else {
+            tempArr.push(0);
+          }
+
+          if ('recovered' in districtDeltaObj) {
+            tempArr.push(
+              districtDeltaObj['recovered']
+                ? districtDeltaObj['recovered']
+                : 0,
+            );
+          } else {
+            tempArr.push(0);
+          }
+
+          if ('deceased' in districtDeltaObj) {
+            tempArr.push(
+              districtDeltaObj['deceased']
+                ? districtDeltaObj['deceased']
+                : 0,
+            );
+          } else {
+            tempArr.push(0);
+          }
+
+          if ('tested' in districtDeltaObj) {
+            tempArr.push(
+              districtDeltaObj['tested']
+                ? districtDeltaObj['tested']
+                : 0,
+            );
+          } else {
+            tempArr.push(0);
+          }
+        }
+
         districtDetails.push(tempArr);
       });
       setDistricts(districtDetails);
@@ -101,6 +171,7 @@ const CustomTable = ({
 
   const element = data => {
     let tempArr = [];
+
     for (let i = 0; i < data.length; i++) {
       if (i === 0)
         tempArr.push(
@@ -119,57 +190,192 @@ const CustomTable = ({
 
       if (i === 1)
         tempArr.push(
-          <AppText
-            title={data[1]}
-            style={[
-              styles.tableDataStyle,
-              { color: lightColorTheme.confirmedCasesColor },
-            ]}
-          />,
+          <View>
+            {data[7] > 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <AppText
+                  title="+"
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.confirmedCasesColor },
+                  ]}
+                />
+
+                <AppText
+                  title={numberWithCommas(data[7])}
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.confirmedCasesColor },
+                  ]}
+                />
+              </View>
+            )}
+            <AppText
+              title={data[1]}
+              style={[
+                styles.tableDataStyle,
+                { color: lightColorTheme.confirmedCasesColor },
+              ]}
+            />
+          </View>,
         );
       if (i === 2)
         tempArr.push(
-          <AppText
-            title={data[2]}
-            style={[
-              styles.tableDataStyle,
-              { color: lightColorTheme.yellowColor },
-            ]}
-          />,
+          <View>
+            {data[8] > 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <AppText
+                  title="+"
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.yellowColor },
+                  ]}
+                />
+                <AppText
+                  title={numberWithCommas(data[8])}
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.yellowColor },
+                  ]}
+                />
+              </View>
+            )}
+            <AppText
+              title={data[2]}
+              style={[
+                styles.tableDataStyle,
+                { color: lightColorTheme.yellowColor },
+              ]}
+            />
+          </View>,
         );
       if (i === 3)
         tempArr.push(
-          <AppText
-            title={data[3]}
-            style={[
-              styles.tableDataStyle,
-              { color: lightColorTheme.recoveredColor },
-            ]}
-          />,
+          <View>
+            {data[9] > 0 && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}
+              >
+                <AppText
+                  title="+"
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.recoveredColor },
+                  ]}
+                />
+                <AppText
+                  title={numberWithCommas(data[9])}
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.recoveredColor },
+                  ]}
+                />
+              </View>
+            )}
+            <AppText
+              title={data[3]}
+              style={[
+                styles.tableDataStyle,
+                { color: lightColorTheme.recoveredColor },
+              ]}
+            />
+          </View>,
         );
       if (i === 4)
         tempArr.push(
-          <AppText
-            title={data[4]}
-            style={[
-              styles.tableDataStyle,
-              {
-                color: theme
-                  ? darkColorTheme.lightWhite
-                  : lightColorTheme.deathsColor,
-              },
-            ]}
-          />,
+          <View>
+            {data[10] > 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <AppText
+                  title="+"
+                  style={[
+                    styles.tableDataStyle,
+                    {
+                      color: theme
+                        ? darkColorTheme.lightWhite
+                        : lightColorTheme.deathsColor,
+                    },
+                  ]}
+                />
+                <AppText
+                  title={numberWithCommas(data[10])}
+                  style={[
+                    styles.tableDataStyle,
+                    {
+                      color: theme
+                        ? darkColorTheme.lightWhite
+                        : lightColorTheme.deathsColor,
+                    },
+                  ]}
+                />
+              </View>
+            )}
+            <AppText
+              title={data[4]}
+              style={[
+                styles.tableDataStyle,
+                {
+                  color: theme
+                    ? darkColorTheme.lightWhite
+                    : lightColorTheme.deathsColor,
+                },
+              ]}
+            />
+          </View>,
         );
       if (i === 5)
         tempArr.push(
-          <AppText
-            title={data[5]}
-            style={[
-              styles.tableDataStyle,
-              { color: lightColorTheme.testedColor },
-            ]}
-          />,
+          <View>
+            {data[11] > 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <AppText
+                  title="+"
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.testedColor },
+                  ]}
+                />
+                <AppText
+                  title={numberWithCommas(data[11])}
+                  style={[
+                    styles.tableDataStyle,
+                    { color: lightColorTheme.testedColor },
+                  ]}
+                />
+              </View>
+            )}
+
+            <AppText
+              title={data[5]}
+              style={[
+                styles.tableDataStyle,
+                { color: lightColorTheme.testedColor },
+              ]}
+            />
+          </View>,
         );
     }
     return tempArr;

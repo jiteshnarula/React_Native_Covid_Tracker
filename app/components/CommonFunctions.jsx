@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import XDate from 'xdate';
-import { format, compareAsc, parse } from 'date-fns'
-
-
+import { format, compareAsc, parse } from 'date-fns';
 
 export const saveAsyncData = async (key, value) => {
   try {
@@ -33,29 +31,43 @@ export function numberWithCommas(x) {
 
 export function gettingTime(timeStamp) {
   const givenTime = Date.parse(timeStamp);
-  return  tConvert( new Date(givenTime).toLocaleTimeString())
+  return tConvert(new Date(givenTime).toLocaleTimeString());
   // console.log(format(new Date(timeStamp).getDate(), 'MMMMMMM'))
 }
 
 export function gettingDate(timeStamp) {
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-];
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   const givenTime = Date.parse(timeStamp);
-  const date = new Date(givenTime).getDate() 
-  const month = new Date(givenTime).getMonth() + 1;
+  const date = new Date(givenTime).getDate();
+  const month = new Date(givenTime).getMonth();
   const year = new Date(givenTime).getFullYear();
-    return date + ", " + monthNames[month] + " " + year;
+  return date + ', ' + monthNames[month] + ' ' + year;
 }
 
-function tConvert (time) {
+function tConvert(time) {
   // Check correct time format and split into components
-  time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  time = time
+    .toString()
+    .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
-  if (time.length > 1) { // If time format correct
-    time = time.slice (1);  // Remove full string match value
+  if (time.length > 1) {
+    // If time format correct
+    time = time.slice(1); // Remove full string match value
     time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
     time[0] = +time[0] % 12 || 12; // Adjust hours
   }
-  return time.join (''); // return adjusted time or original string
+  return time.join(''); // return adjusted time or original string
 }

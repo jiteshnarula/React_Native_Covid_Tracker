@@ -31,15 +31,15 @@ export default StyleSheet.create({
     fontFamily: 'ubuntu-bold',
   },
   mediumTextRegular: {
-    fontSize: 19,
+    fontSize: 18,
     fontFamily: 'ubuntu-regular',
   },
   mediumTextMedium: {
-    fontSize: 19,
+    fontSize: 18,
     fontFamily: 'ubuntu-medium',
   },
   mediumTextBold: {
-    fontSize: 19,
+    fontSize: 18,
     fontFamily: 'ubuntu-bold',
   },
   largeTextRegular: {

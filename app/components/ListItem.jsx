@@ -4,10 +4,30 @@ import { View, StyleSheet } from 'react-native';
 import AppText from './Form/AppText';
 import GlobalCSS from '../config/globalcss';
 import RenderSwitch from './Form/RenderSwitch';
+import { connect } from 'react-redux';
+import { darkColorTheme, lightColorTheme } from '../config/theme';
 
-const ListItem = ({ left, leftComponent, right, rightComponent }) => {
+const ListItem = ({
+  left,
+  leftComponent,
+  right,
+  rightComponent,
+  theme,
+  showBorder = false,
+}) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderBottomColor:
+            showBorder && theme
+              ? darkColorTheme.lightWhite
+              : lightColorTheme.blackColor,
+          borderBottomWidth: showBorder ? 0.2 : 0,
+        },
+      ]}
+    >
       {left ? leftComponent : null}
       {right ? rightComponent : null}
     </View>
@@ -24,4 +44,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-export default ListItem;
+const mapStateToProps = state => {
+  return {
+    theme: state.themeReducer.theme,
+  };
+};
+export default connect(mapStateToProps)(ListItem);

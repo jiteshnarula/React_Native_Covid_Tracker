@@ -1,5 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+} from 'react-native';
 import GlobalCSS from '../../config/globalcss';
 import ListItem from '../../components/ListItem';
 import AppText from '../../components/Form/AppText';
@@ -7,9 +11,21 @@ import { darkColorTheme, lightColorTheme } from '../../config/theme';
 import RenderSwitch from '../../components/Form/RenderSwitch';
 import { connect } from 'react-redux';
 
-const Settings = ({ theme }) => {
+import routes from '../../navigation/routes';
+
+const Settings = props => {
+  const { theme, navigation } = props;
   return (
-    <View style={GlobalCSS.container}>
+    <View
+      style={[
+        GlobalCSS.container,
+        {
+          backgroundColor: theme
+            ? darkColorTheme.primary
+            : lightColorTheme.secondary,
+        },
+      ]}
+    >
       <ListItem
         left={true}
         leftComponent={
@@ -25,26 +41,57 @@ const Settings = ({ theme }) => {
             ]}
           />
         }
+        showBorder={true}
         right={true}
         rightComponent={<RenderSwitch />}
       />
-      <ListItem
-        left={true}
-        leftComponent={
-          <AppText
-            title="About us"
-            style={[
-              GlobalCSS.mediumTextRegular,
-              {
-                color: theme
-                  ? darkColorTheme.secondary
-                  : lightColorTheme.blackColor,
-              },
-            ]}
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(routes.OFFICIAL_DATA)}
+      >
+        <View>
+          <ListItem
+            left={true}
+            leftComponent={
+              <AppText
+                title="Official Data"
+                style={[
+                  GlobalCSS.mediumTextRegular,
+                  {
+                    color: theme
+                      ? darkColorTheme.secondary
+                      : lightColorTheme.blackColor,
+                  },
+                ]}
+              />
+            }
+            right={false}
+            showBorder={true}
           />
-        }
-        right={false}
-      />
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(routes.ABOUT)}
+      >
+        <View>
+          <ListItem
+            left={true}
+            leftComponent={
+              <AppText
+                title="About us"
+                style={[
+                  GlobalCSS.mediumTextRegular,
+                  {
+                    color: theme
+                      ? darkColorTheme.secondary
+                      : lightColorTheme.blackColor,
+                  },
+                ]}
+              />
+            }
+            right={false}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

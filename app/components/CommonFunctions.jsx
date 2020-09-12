@@ -35,7 +35,7 @@ export function gettingTime(timeStamp) {
   // console.log(format(new Date(timeStamp).getDate(), 'MMMMMMM'))
 }
 
-export function gettingDate(timeStamp) {
+export function gettingDate(timeStamp, formattedDate) {
   const monthNames = [
     'Jan',
     'Feb',
@@ -51,9 +51,18 @@ export function gettingDate(timeStamp) {
     'Dec',
   ];
   const givenTime = Date.parse(timeStamp);
-  const date = new Date(givenTime).getDate();
-  const month = new Date(givenTime).getMonth();
-  const year = new Date(givenTime).getFullYear();
+  let date = new Date(givenTime).getDate();
+  let month = new Date(givenTime).getMonth();
+  let year = new Date(givenTime).getFullYear();
+  if (formattedDate) {
+    if (/^\d$/.test(month)) {
+      month = '0' + month;
+    }
+    if (/^\d$/.test(date)) {
+      date = '0' + date;
+    }
+    return year + '-' + month + '-' + date;
+  }
   return date + ', ' + monthNames[month] + ' ' + year;
 }
 

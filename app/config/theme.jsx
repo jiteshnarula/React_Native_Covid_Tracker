@@ -19,5 +19,5 @@ export const darkColorTheme = {
   secondary: '#ffffff',
   statusBarColor: '#263238',
   selectedColor: '#28A745',
-  lightWhite: '#a5b7c0',
+  lightWhite: '#f0f3f5',
 };

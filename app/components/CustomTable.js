@@ -30,6 +30,7 @@ const CustomTable = ({
   widthArr,
   listing,
   theme,
+  hideTested,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [stateName, setStateName] = useState(false);
@@ -46,6 +47,7 @@ const CustomTable = ({
   ];
   const handleRowDataClick = rowData => {
     const districtDetails = [];
+    setShowModal(true);
     setStateName(rowData[0]);
     setNotes(
       listing[rowData[6]]['meta']['notes']
@@ -166,7 +168,6 @@ const CustomTable = ({
     } else {
       console.log('Something went wrong');
     }
-    setShowModal(true);
   };
 
   const element = data => {
@@ -341,7 +342,7 @@ const CustomTable = ({
             />
           </View>,
         );
-      if (i === 5)
+      if (!hideTested && i === 5)
         tempArr.push(
           <View>
             {data[11] > 0 && (
@@ -452,7 +453,7 @@ const CustomTable = ({
           />,
         );
       }
-      if (i === 5) {
+      if (!hideTested && i === 5) {
         tempArr.push(
           <AppText
             title={thData[5]}
@@ -479,7 +480,7 @@ const CustomTable = ({
         },
       ]}
     >
-      <AppModal isVisible={showModal}>
+      {/* <AppModal isVisible={showModal}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -590,9 +591,9 @@ const CustomTable = ({
                   />
                 </>
               )}
-            </View>
-            {/* table contaner */}
-            <View style={{ flex: 1 }}>
+            </View> */}
+      {/* table contaner */}
+      {/* <View style={{ flex: 1 }}>
               <ScrollView horizontal={true}>
                 <View style={{ marginBottom: 50 }}>
                   <Table>
@@ -685,7 +686,7 @@ const CustomTable = ({
           </View>
           <View />
         </View>
-      </AppModal>
+      </AppModal> */}
       <ScrollView horizontal={true}>
         <View>
           <Table
@@ -718,50 +719,94 @@ const CustomTable = ({
             <Table
             // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
             >
-              {tableData.map((rowData, index) => (
-                <TouchableHighlight
-                  onPress={() => handleRowDataClick(rowData)}
-                  key={index}
-                >
-                  <Row
-                    style={[
-                      styles.row,
-                      index % 2
-                        ? {
-                            backgroundColor: theme
-                              ? darkColorTheme.statusBarColor
-                              : '#F7F6E7',
-                          }
-                        : {
-                            backgroundColor: theme
-                              ? darkColorTheme.primary
-                              : lightColorTheme.secondary,
+              {tableData.map((rowData, index) => {
+                if (!hideTested) {
+                  return (
+                    <TouchableHighlight
+                      onPress={() => handleRowDataClick(rowData)}
+                      key={index}
+                    >
+                      <Row
+                        style={[
+                          styles.row,
+                          index % 2
+                            ? {
+                                backgroundColor: theme
+                                  ? darkColorTheme.statusBarColor
+                                  : '#F7F6E7',
+                              }
+                            : {
+                                backgroundColor: theme
+                                  ? darkColorTheme.primary
+                                  : lightColorTheme.secondary,
+                              },
+                          {
+                            borderLeftWidth: 1,
+                            borderLeftColor: theme
+                              ? darkColorTheme.secondary
+                              : lightColorTheme.lightPrimary,
+                            borderRightWidth: 1,
+                            borderRightColor: theme
+                              ? darkColorTheme.secondary
+                              : lightColorTheme.lightPrimary,
                           },
-                      {
-                        borderLeftWidth: 1,
-                        borderLeftColor: theme
-                          ? darkColorTheme.secondary
-                          : lightColorTheme.lightPrimary,
-                        borderRightWidth: 1,
-                        borderRightColor: theme
-                          ? darkColorTheme.secondary
-                          : lightColorTheme.lightPrimary,
-                      },
-                      index === tableData.length - 1 && {
-                        borderBottomWidth: 1,
-                        borderBottomColor: theme
-                          ? darkColorTheme.secondary
-                          : lightColorTheme.lightPrimary,
-                        borderBottomLeftRadius: 10,
-                        borderBottomRightRadius: 10,
-                      },
-                    ]}
-                    widthArr={widthArr}
-                    data={element(rowData)}
-                    textStyle={[styles.text]}
-                  />
-                </TouchableHighlight>
-              ))}
+                          index === tableData.length - 1 && {
+                            borderBottomWidth: 1,
+                            borderBottomColor: theme
+                              ? darkColorTheme.secondary
+                              : lightColorTheme.lightPrimary,
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10,
+                          },
+                        ]}
+                        widthArr={widthArr}
+                        data={element(rowData)}
+                        textStyle={[styles.text]}
+                      />
+                    </TouchableHighlight>
+                  );
+                } else {
+                  return (
+                    <Row
+                      style={[
+                        styles.row,
+                        index % 2
+                          ? {
+                              backgroundColor: theme
+                                ? darkColorTheme.statusBarColor
+                                : '#F7F6E7',
+                            }
+                          : {
+                              backgroundColor: theme
+                                ? darkColorTheme.primary
+                                : lightColorTheme.secondary,
+                            },
+                        {
+                          borderLeftWidth: 1,
+                          borderLeftColor: theme
+                            ? darkColorTheme.secondary
+                            : lightColorTheme.lightPrimary,
+                          borderRightWidth: 1,
+                          borderRightColor: theme
+                            ? darkColorTheme.secondary
+                            : lightColorTheme.lightPrimary,
+                        },
+                        index === tableData.length - 1 && {
+                          borderBottomWidth: 1,
+                          borderBottomColor: theme
+                            ? darkColorTheme.secondary
+                            : lightColorTheme.lightPrimary,
+                          borderBottomLeftRadius: 10,
+                          borderBottomRightRadius: 10,
+                        },
+                      ]}
+                      widthArr={widthArr}
+                      data={element(rowData)}
+                      textStyle={[styles.text]}
+                    />
+                  );
+                }
+              })}
             </Table>
           </ScrollView>
         </View>

@@ -16,5 +16,6 @@ export const header = theme => {
         : lightColorTheme.secondary,
       ...GlobalCSS.mediumTextRegular,
     },
+    
   };
 };

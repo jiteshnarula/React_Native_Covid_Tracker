@@ -1,7 +1,12 @@
 import apiOffcialClient from './offcialClient';
 
-const getOfficialListings = () => apiOffcialClient.get('/latest');
+const getOfficialListings = () =>
+  apiOffcialClient.get('/stats/latest');
 const getOfficialHistoryListings = () =>
-  apiOffcialClient.get('/history');
-
-export { getOfficialListings, getOfficialHistoryListings };
+  apiOffcialClient.get('/stats/history');
+const getContactsListing = () => apiOffcialClient.get('/contacts');
+export {
+  getOfficialListings,
+  getOfficialHistoryListings,
+  getContactsListing,
+};

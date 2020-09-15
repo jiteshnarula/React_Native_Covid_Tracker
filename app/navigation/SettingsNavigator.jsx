@@ -9,6 +9,7 @@ import { lightColorTheme } from '../config/theme';
 import { TouchableWithoutFeedback } from 'react-native';
 import routes from './routes';
 import OffcialData from '../screens/OfficialData/OfficialData';
+import ContactHelpline from '../screens/ContactHelpline/ContactHelpline';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,14 @@ const SettingsNavigator = props => {
       <Stack.Screen
         name={routes.OFFICIAL_DATA}
         component={OffcialData}
+        options={{
+          headerTintColor: lightColorTheme.secondary,
+        }}
+      />
+
+      <Stack.Screen
+        name={routes.CONTACT_HELPLINE}
+        component={ContactHelpline}
         options={{
           headerTintColor: lightColorTheme.secondary,
         }}

@@ -477,10 +477,11 @@ const CustomTable = ({
           backgroundColor: theme
             ? darkColorTheme.primary
             : lightColorTheme.secondary,
+          alignItems: 'center',
         },
       ]}
     >
-      {/* <AppModal isVisible={showModal}>
+      <AppModal isVisible={showModal}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -591,9 +592,9 @@ const CustomTable = ({
                   />
                 </>
               )}
-            </View> */}
-      {/* table contaner */}
-      {/* <View style={{ flex: 1 }}>
+            </View>
+            {/* table contaner */}
+            <View style={{ flex: 1 }}>
               <ScrollView horizontal={true}>
                 <View style={{ marginBottom: 50 }}>
                   <Table>
@@ -686,7 +687,7 @@ const CustomTable = ({
           </View>
           <View />
         </View>
-      </AppModal> */}
+      </AppModal>
       <ScrollView horizontal={true}>
         <View>
           <Table
@@ -768,6 +769,7 @@ const CustomTable = ({
                 } else {
                   return (
                     <Row
+                      key={index}
                       style={[
                         styles.row,
                         index % 2
@@ -819,7 +821,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 7,
-    paddingTop: 30,
     marginBottom: 23,
     backgroundColor: '#fff',
     // flex: 1,

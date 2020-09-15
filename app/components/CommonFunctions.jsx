@@ -54,16 +54,9 @@ export function gettingDate(timeStamp, formattedDate) {
   let date = new Date(givenTime).getDate();
   let month = new Date(givenTime).getMonth();
   let year = new Date(givenTime).getFullYear();
-  if (formattedDate) {
-    if (/^\d$/.test(month)) {
-      month = '0' + month;
-    }
-    if (/^\d$/.test(date)) {
-      date = '0' + date;
-    }
-    return year + '-' + month + '-' + date;
-  }
-  return date + ', ' + monthNames[month] + ' ' + year;
+  return /^\d$/.test(date)
+    ? '0' + date
+    : date + ', ' + monthNames[month] + ' ' + year;
 }
 
 function tConvert(time) {

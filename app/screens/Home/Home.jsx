@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
-  Button,
+  TouchableWithoutFeedback,
   StyleSheet,
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import ListItem from '../../components/ListItem';
 import GlobalCss from '../../config/globalcss';
@@ -46,6 +46,7 @@ const Home = ({ theme }) => {
     'Tested',
   ];
   const widthArr = [140, 80, 80, 80, 80, 80];
+
   useEffect(() => {
     loadListing(true);
   }, []);
@@ -86,10 +87,18 @@ const Home = ({ theme }) => {
             temp = lastUpdated;
             bool = true;
           }
-          const activeCases =
-            (stateObj['confirmed'] ? stateObj['confirmed'] : 0) -
-            (stateObj['recovered'] ? stateObj['recovered'] : 0) -
-            (stateObj['deceased'] ? stateObj['deceased'] : 0);
+          if (
+            'confirmed' in stateObj &&
+            'recovered' in stateObj &&
+            'deceased' in stateObj
+          ) {
+            activeCases =
+              (stateObj['confirmed'] ? stateObj['confirmed'] : 0) -
+              (stateObj['recovered'] ? stateObj['recovered'] : 0) -
+              (stateObj['deceased'] ? stateObj['deceased'] : 0);
+          } else {
+            activeCases = 0;
+          }
 
           sumActive += activeCases;
 
@@ -107,9 +116,7 @@ const Home = ({ theme }) => {
             activeCases > 0 ? numberWithCommas(activeCases) : '-',
           );
           tempArr.push(
-            stateObj['confirmed'] > 0
-              ? numberWithCommas(stateObj['confirmed'])
-              : '-',
+            stateObj['confirmed'] > 0 ? stateObj['confirmed'] : '-',
           );
           tempArr.push(
             stateObj['recovered'] > 0
@@ -192,13 +199,16 @@ const Home = ({ theme }) => {
             tempArr.push(0);
             tempArr.push(0);
           }
-
           tableArray.push(tempArr);
         } else {
           console.log('Not found anything');
         }
       });
-      setTableData(tableArray);
+
+      let sortedArray = tableArray.sort(function(a, b) {
+        return b[2] - a[2];
+      });
+      setTableData(sortedArray);
       setTotalActiveCases(sumActive);
       setTotalConfirmedCases(sumConfirmed);
       setTotalRecoveredCases(sumRecovered);
@@ -209,10 +219,22 @@ const Home = ({ theme }) => {
       return;
     }
   };
-  const onRefresh = () => {
-    setRefreshing(true);
+  const handleRefresh = () => {
+    ToastAndroid.showWithGravityAndOffset(
+      'Please wait... List is getting refreshed',
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
     loadListing(false).then(() => {
-      setRefreshing(false);
+      ToastAndroid.showWithGravityAndOffset(
+        'Refresh done...',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
     });
   };
   if (loading) {
@@ -258,174 +280,186 @@ const Home = ({ theme }) => {
         },
       ]}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
+      <ListItem
+        left={true}
+        leftComponent={
+          <AppText
+            title="Theme"
+            style={[
+              GlobalCss.mediumTextRegular,
+              {
+                color: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.blackColor,
+              },
+            ]}
           />
         }
-      >
-        <ListItem
-          left={true}
-          leftComponent={
+        showBorder={false}
+        right={true}
+        rightComponent={<RenderSwitch />}
+      />
+      <Card
+        topLeft={true}
+        topCenter={true}
+        topRight={true}
+        middleSection={true}
+        topLeftComponent={
+          <View style={styles.topRightComponentStyle}>
             <AppText
-              title="Theme"
+              title="L.U. Date"
               style={[
-                GlobalCss.mediumTextRegular,
+                GlobalCss.extraSmallTextBold,
                 {
                   color: theme
                     ? darkColorTheme.secondary
-                    : lightColorTheme.blackColor,
+                    : lightColorTheme.deathsColor,
                 },
               ]}
             />
-          }
-          showBorder={false}
-          right={true}
-          rightComponent={<RenderSwitch />}
-        />
-        <Card
-          topLeft={true}
-          topCenter={true}
-          topRight={true}
-          middleSection={true}
-          topLeftComponent={
-            <View style={styles.topRightComponentStyle}>
+            <AppText
+              title={gettingDate(lastUpdatedTimezone)}
+              style={[
+                GlobalCss.extraSmallTextRegular,
+                {
+                  color: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.deathsColor,
+                },
+              ]}
+            />
+          </View>
+        }
+        topCenterComponent={
+          <View style={styles.topRightComponentStyle}>
+            <AppText
+              title="Total Cases"
+              style={[
+                GlobalCss.mediumTextBold,
+                {
+                  marginTop: 10,
+                  color: lightColorTheme.confirmedCasesColor,
+                },
+              ]}
+            />
+            <AppText
+              title={numberWithCommas(totalConfirmedCases)}
+              style={[
+                GlobalCss.smallTextRegular,
+                { color: lightColorTheme.confirmedCasesColor },
+              ]}
+            />
+          </View>
+        }
+        topRightComponent={
+          <View style={styles.topRightComponentStyle}>
+            <AppText
+              title="L.U. Time"
+              style={[
+                GlobalCss.extraSmallTextBold,
+                {
+                  color: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.deathsColor,
+                },
+              ]}
+            />
+            <AppText
+              title={gettingTime(lastUpdatedTimezone)}
+              style={[
+                GlobalCss.extraSmallTextRegular,
+                {
+                  color: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.deathsColor,
+                },
+              ]}
+            />
+          </View>
+        }
+        middleSectionComponent={
+          <View style={styles.middleSectionContainer}>
+            <View style={styles.middleContainer}>
               <AppText
-                title="L.U. Date"
                 style={[
-                  GlobalCss.extraSmallTextBold,
-                  {
-                    color: theme
-                      ? darkColorTheme.secondary
-                      : lightColorTheme.deathsColor,
-                  },
+                  GlobalCss.mediumTextMedium,
+                  { color: lightColorTheme.activeCasesColor },
                 ]}
+                title="Active"
               />
               <AppText
-                title={gettingDate(lastUpdatedTimezone)}
-                style={[
-                  GlobalCss.extraSmallTextRegular,
-                  {
-                    color: theme
-                      ? darkColorTheme.secondary
-                      : lightColorTheme.deathsColor,
-                  },
-                ]}
-              />
-            </View>
-          }
-          topCenterComponent={
-            <View style={styles.topRightComponentStyle}>
-              <AppText
-                title="Total Cases"
-                style={[
-                  GlobalCss.mediumTextBold,
-                  {
-                    marginTop: 10,
-                    color: lightColorTheme.confirmedCasesColor,
-                  },
-                ]}
-              />
-              <AppText
-                title={numberWithCommas(totalConfirmedCases)}
                 style={[
                   GlobalCss.smallTextRegular,
-                  { color: lightColorTheme.confirmedCasesColor },
+                  { color: lightColorTheme.activeCasesColor },
                 ]}
+                title={numberWithCommas(totalActiveCases)}
               />
             </View>
-          }
-          topRightComponent={
-            <View style={styles.topRightComponentStyle}>
+            <View style={styles.middleContainer}>
               <AppText
-                title="L.U. Time"
                 style={[
-                  GlobalCss.extraSmallTextBold,
-                  {
-                    color: theme
-                      ? darkColorTheme.secondary
-                      : lightColorTheme.deathsColor,
-                  },
+                  GlobalCss.mediumTextMedium,
+                  { color: lightColorTheme.recoveredColor },
                 ]}
+                title="Recovered"
               />
               <AppText
-                title={gettingTime(lastUpdatedTimezone)}
                 style={[
-                  GlobalCss.extraSmallTextRegular,
-                  {
-                    color: theme
-                      ? darkColorTheme.secondary
-                      : lightColorTheme.deathsColor,
-                  },
+                  GlobalCss.smallTextRegular,
+                  { color: lightColorTheme.recoveredColor },
                 ]}
+                title={numberWithCommas(totalRecoveredCases)}
               />
             </View>
-          }
-          middleSectionComponent={
-            <View style={styles.middleSectionContainer}>
-              <View style={styles.middleContainer}>
-                <AppText
-                  style={[
-                    GlobalCss.mediumTextMedium,
-                    { color: lightColorTheme.activeCasesColor },
-                  ]}
-                  title="Active"
-                />
-                <AppText
-                  style={[
-                    GlobalCss.smallTextRegular,
-                    { color: lightColorTheme.activeCasesColor },
-                  ]}
-                  title={numberWithCommas(totalActiveCases)}
-                />
-              </View>
-              <View style={styles.middleContainer}>
-                <AppText
-                  style={[
-                    GlobalCss.mediumTextMedium,
-                    { color: lightColorTheme.recoveredColor },
-                  ]}
-                  title="Recovered"
-                />
-                <AppText
-                  style={[
-                    GlobalCss.smallTextRegular,
-                    { color: lightColorTheme.recoveredColor },
-                  ]}
-                  title={numberWithCommas(totalRecoveredCases)}
-                />
-              </View>
 
-              <View style={styles.middleContainer}>
-                <AppText
-                  style={[
-                    GlobalCss.mediumTextMedium,
-                    { color: lightColorTheme.testedColor },
-                  ]}
-                  title="Tested"
-                />
-                <AppText
-                  style={[
-                    GlobalCss.smallTextRegular,
-                    { color: lightColorTheme.testedColor },
-                  ]}
-                  title={numberWithCommas(totalTestedCases)}
-                />
-              </View>
+            <View style={styles.middleContainer}>
+              <AppText
+                style={[
+                  GlobalCss.mediumTextMedium,
+                  { color: lightColorTheme.testedColor },
+                ]}
+                title="Tested"
+              />
+              <AppText
+                style={[
+                  GlobalCss.smallTextRegular,
+                  { color: lightColorTheme.testedColor },
+                ]}
+                title={numberWithCommas(totalTestedCases)}
+              />
             </View>
-          }
-        />
-        {/* TODO: Table Component */}
-        <CustomTable
-          tableHead={tableHead}
-          tableData={tableData}
-          widthArr={widthArr}
-          listing={listing}
-        />
-      </ScrollView>
+          </View>
+        }
+      />
+      {/* TODO: Table Component */}
+      <TouchableWithoutFeedback onPress={handleRefresh}>
+        <View style={[styles.buttonContainer]}>
+          <AppText
+            title="Refresh"
+            style={[
+              styles.buttonStyle,
+              {
+                borderWidth: 1,
+                color: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.primary,
+                backgroundColor: theme
+                  ? darkColorTheme.primary
+                  : lightColorTheme.secondary,
+                borderColor: theme
+                  ? darkColorTheme.statusBarColor
+                  : lightColorTheme.statusBarColor,
+              },
+            ]}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+      <CustomTable
+        tableHead={tableHead}
+        tableData={tableData}
+        widthArr={widthArr}
+        listing={listing}
+      />
     </View>
   );
 };
@@ -450,6 +484,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+  buttonStyle: {
+    ...GlobalCss.smallTextMedium,
+    textAlign: 'center',
+    padding: 5,
+    borderRadius: 10,
+  },
+  buttonContainer: {
+    width: '100%',
+    alignItems: 'flex-end',
+    paddingRight: 20,
+    paddingTop: 7,
+    paddingBottom: 2,
   },
 });
 

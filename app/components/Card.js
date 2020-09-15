@@ -13,6 +13,7 @@ const Card = ({
   topRightComponent,
   middleSection,
   middleSectionComponent,
+  todaysStyle,
 }) => {
   return (
     <View
@@ -23,6 +24,7 @@ const Card = ({
             ? darkColorTheme.secondary
             : lightColorTheme.primary,
         },
+        todaysStyle,
       ]}
     >
       {/* Top Section */}
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     marginLeft: 7,
     marginRight: 7,
+    marginTop: 7,
     height: 140,
     borderRadius: 10,
     borderWidth: 1,

@@ -45,15 +45,16 @@ const Settings = props => {
         right={true}
         rightComponent={<RenderSwitch />}
       />
+
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(routes.OFFICIAL_DATA)}
+        onPress={() => navigation.navigate(routes.CONTACT_HELPLINE)}
       >
         <View>
           <ListItem
             left={true}
             leftComponent={
               <AppText
-                title="Official Data"
+                title={routes.CONTACT_HELPLINE}
                 style={[
                   GlobalCSS.mediumTextRegular,
                   {

@@ -3,4 +3,5 @@ export default Object.freeze({
   ABOUT: 'About us',
   SETTINGS: 'Settings',
   OFFICIAL_DATA: 'Official Data',
+  CONTACT_HELPLINE: 'Contact Helpline',
 });

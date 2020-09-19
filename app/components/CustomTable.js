@@ -217,7 +217,7 @@ const CustomTable = ({
               </View>
             )}
             <AppText
-              title={data[1]}
+              title={numberWithCommas(data[1])}
               style={[
                 styles.tableDataStyle,
                 { color: lightColorTheme.confirmedCasesColor },
@@ -252,7 +252,7 @@ const CustomTable = ({
               </View>
             )}
             <AppText
-              title={data[2]}
+              title={numberWithCommas(data[2])}
               style={[
                 styles.tableDataStyle,
                 { color: lightColorTheme.yellowColor },
@@ -287,7 +287,7 @@ const CustomTable = ({
               </View>
             )}
             <AppText
-              title={data[3]}
+              title={numberWithCommas(data[3])}
               style={[
                 styles.tableDataStyle,
                 { color: lightColorTheme.recoveredColor },
@@ -330,7 +330,7 @@ const CustomTable = ({
               </View>
             )}
             <AppText
-              title={data[4]}
+              title={numberWithCommas(data[4])}
               style={[
                 styles.tableDataStyle,
                 {
@@ -370,7 +370,7 @@ const CustomTable = ({
             )}
 
             <AppText
-              title={data[5]}
+              title={numberWithCommas(data[5])}
               style={[
                 styles.tableDataStyle,
                 { color: lightColorTheme.testedColor },

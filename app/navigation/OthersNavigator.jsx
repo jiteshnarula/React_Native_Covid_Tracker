@@ -5,16 +5,14 @@ import { header } from '../config/commonstyles';
 import { connect } from 'react-redux';
 import OfficialData from '../screens/OfficialData/OfficialData';
 import routes from './routes';
+import Home from '../screens/Home/Home';
 
 const Stack = createStackNavigator();
 
 const OthersNavigator = ({ theme }) => {
   return (
     <Stack.Navigator screenOptions={header(theme)}>
-      <Stack.Screen
-        name={routes.OFFICIAL_DATA}
-        component={OfficialData}
-      />
+      <Stack.Screen name={routes.UNOFFICIAL_DATA} component={Home} />
     </Stack.Navigator>
   );
 };

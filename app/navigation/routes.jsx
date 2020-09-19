@@ -4,4 +4,6 @@ export default Object.freeze({
   SETTINGS: 'Settings',
   OFFICIAL_DATA: 'Official Data',
   CONTACT_HELPLINE: 'Contact Helpline',
+  UNOFFICIAL_DATA: 'Unofficial Data',
+  SplashScreen: 'Splash Screen',
 });

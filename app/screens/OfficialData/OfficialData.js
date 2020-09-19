@@ -143,18 +143,16 @@ const OfficialData = ({ theme }) => {
           tabData.push(tempArr);
         });
 
-        setTableData(tabData);
+        // sort the tabData
+        let sortedArray = tabData.sort(function(a, b) {
+          return b[2] - a[2];
+        });
+        setTableData(sortedArray);
       }
     } catch (err) {
       console.log('Something went wrong', err);
       return;
     }
-  };
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadListing(false).then(() => {
-      setRefreshing(false);
-    });
   };
   if (loading) {
     return (
@@ -201,6 +199,25 @@ const OfficialData = ({ theme }) => {
         },
       ]}
     >
+      <ListItem
+        left={true}
+        leftComponent={
+          <AppText
+            title="Theme"
+            style={[
+              GlobalCss.mediumTextRegular,
+              {
+                color: theme
+                  ? darkColorTheme.secondary
+                  : lightColorTheme.blackColor,
+              },
+            ]}
+          />
+        }
+        showBorder={false}
+        right={true}
+        rightComponent={<RenderSwitch />}
+      />
       <Card
         topLeft={true}
         topCenter={true}
@@ -381,7 +398,7 @@ const OfficialData = ({ theme }) => {
                   GlobalCss.mediumTextMedium,
                   { color: lightColorTheme.confirmedCasesColor },
                 ]}
-                title="Active"
+                title="Confirmed"
               />
               <AppText
                 style={[

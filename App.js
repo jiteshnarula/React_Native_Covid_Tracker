@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
@@ -11,6 +11,10 @@ import AppNavigator from './app/navigation/AppNavigator';
 import configureStore from './app/store/store';
 import { createStore } from 'redux';
 import reducers from './app/store/reducers';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './configureStore';
+import SplashScreen from './app/screens/Splash/SplashScreen';
+import SplashScreenNavigator from './app/navigation/SplashScreenNavigator';
 
 const getFonts = () => {
   return Font.loadAsync({
@@ -23,10 +27,25 @@ const getFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [component, setComponent] = useState(
+    <SplashScreenNavigator />,
+  );
+  useEffect(() => {
+    const timeoutHandle = setTimeout(function() {
+      console.log('hello');
+      setComponent(<AppNavigator />);
+      return () => {
+        clearTimeout(timeoutHandle);
+      };
+    }, 2000);
+  }, []);
+
   if (fontsLoaded) {
     return (
-      <Provider store={createStore(reducers)}>
-        <AppNavigator />
+      <Provider store={store}>
+        <PersistGate loading={<AppLoading />} persistor={persistor}>
+          {component}
+        </PersistGate>
       </Provider>
     );
   }

@@ -6,16 +6,12 @@ import { Switch } from 'react-native-switch';
 import { saveAsyncData } from '../CommonFunctions';
 import { connect } from 'react-redux';
 import { changeTheme } from '../../store/Home/actions';
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
 
 const RenderSwitch = props => {
   const { theme, changeTheme } = props;
   const handleSwitch = () => {
     // if (switchValue) saveAsyncData('theme', 'light');
-    // else saveAsyncData('theme', 'dark');
+    saveAsyncData('theme', !theme);
     changeTheme(!theme);
   };
   return (

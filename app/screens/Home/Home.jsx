@@ -50,7 +50,6 @@ const Home = ({ theme }) => {
   useEffect(() => {
     loadListing(true);
   }, []);
-  const findingUpdatedDate = date => {};
 
   const loadListing = async mode => {
     let response;
@@ -112,26 +111,18 @@ const Home = ({ theme }) => {
             stateObj['confirmed'] > 0 ? stateObj['confirmed'] : 0;
 
           tempArr.push(data.sn);
-          tempArr.push(
-            activeCases > 0 ? numberWithCommas(activeCases) : '-',
-          );
+          tempArr.push(activeCases > 0 ? activeCases : '-');
           tempArr.push(
             stateObj['confirmed'] > 0 ? stateObj['confirmed'] : '-',
           );
           tempArr.push(
-            stateObj['recovered'] > 0
-              ? numberWithCommas(stateObj['recovered'])
-              : '-',
+            stateObj['recovered'] > 0 ? stateObj['recovered'] : '-',
           );
           tempArr.push(
-            stateObj['deceased'] > 0
-              ? numberWithCommas(stateObj['deceased'])
-              : '-',
+            stateObj['deceased'] > 0 ? stateObj['deceased'] : '-',
           );
           tempArr.push(
-            stateObj['tested'] > 0
-              ? numberWithCommas(stateObj['tested'])
-              : '-',
+            stateObj['tested'] > 0 ? stateObj['tested'] : '-',
           );
           tempArr.push(data.sc);
 
@@ -280,25 +271,6 @@ const Home = ({ theme }) => {
         },
       ]}
     >
-      <ListItem
-        left={true}
-        leftComponent={
-          <AppText
-            title="Theme"
-            style={[
-              GlobalCss.mediumTextRegular,
-              {
-                color: theme
-                  ? darkColorTheme.secondary
-                  : lightColorTheme.blackColor,
-              },
-            ]}
-          />
-        }
-        showBorder={false}
-        right={true}
-        rightComponent={<RenderSwitch />}
-      />
       <Card
         topLeft={true}
         topCenter={true}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAsyncData } from '../../components/CommonFunctions';
 import { THEME_STYLE } from './types';
 
 const initial_state = {

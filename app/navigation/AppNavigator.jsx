@@ -36,7 +36,7 @@ const AppNavigator = props => {
         }}
       >
         <Tab.Screen
-          name={routes.OFFICIAL_DATA}
+          name={routes.UNOFFICIAL_DATA}
           component={OthersNavigator}
           options={{
             tabBarIcon: ({ size, color }) => (

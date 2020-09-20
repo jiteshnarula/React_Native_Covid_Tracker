@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
+  ScrollView,
 } from 'react-native';
 import AppText from '../../components/Form/AppText';
 import {
@@ -22,28 +23,48 @@ const About = props => {
   const aboutusQA = [
     {
       id: 1,
-      title: 'Are you official?',
-      body: 'No',
+      title:
+        'What is this App and What kind of data one can see through this app?',
+      body:
+        'This is COVID 19 Tracker app. Basically, Made only for India. Here you can find Official and Unofficial data. Unofficial data is more recent.',
     },
     {
       id: 2,
       title:
-        'What are your sources? How is the data gathered for this project?',
-      body:
-        'We are using state bulletins and official handles to update our numbers. The data is validated by a group of volunteers and published into a Google sheet and an API. API is available for all at api.covid19india.org. We would love it if you can use this data in the fight against this virus. The source list is here.',
+        'Why does the app unofficial data have difference in numbers compared to official data?',
+      body: `Official data is updated based on MoHFW updates the data at a scheduled time. However, Unofficial data update them based on state press bulletins, official (CM, Health M) handles, PBI, Press Trust of India, ANI reports. These are generally more recent.`,
     },
     {
       id: 3,
-      title:
-        'Why does the app have difference in numbers compared to MOHFW website?',
-      body:
-        'MoHFW updates the data at a scheduled time. However, we update them based on state press bulletins, official (CM, Health M) handles, PBI, Press Trust of India, ANI reports. These are generally more recent.',
+      title: 'Sources of Unofficial Data?',
+      body: `
+      1. The awesome volunteer driven patient tracing data covid19india.org
+      2. API (NLP): http://coronatravelhistory.pythonanywhere.com/
+      3. API (Travel history): https://api.covid19india.org/travel_history.json`,
     },
     {
       id: 4,
-      title: 'Where can I find the data for this?',
-      body:
-        'All the data is available through an API for further analysis and development here : api.covid19india.org',
+      title: 'Sources of Official Data?',
+      body: `
+      1. Post Mar 15, data is from The Ministry of Health & Family Welfare 
+      2. Pre Mar 15, data is sourced from datameet/covid19
+      3.  Medical colleges data: https://api.steinhq.com/v1/storages/5e6e3e9fb88d3d04ae08158c/Hospitals`,
+    },
+
+    {
+      id: 5,
+      title: 'How one can check their district data?',
+      body: `District data is only possible to check in case of Unofficial data.`,
+    },
+    {
+      id: 6,
+      title: 'Credits',
+      body: `
+      1. Awesome team at covid19india.org
+      2. Hospital & medical colleges data API from NirantK
+      3. ICMR testing data API from NirantK
+      4. NLP data API from meghanabhange and NirantK
+      5. GalacticMaster for reporting updated contact details`,
     },
   ];
   const _head = item => {
@@ -78,7 +99,16 @@ const About = props => {
   };
   const _body = item => {
     return (
-      <View style={styles.body}>
+      <View
+        style={[
+          styles.body,
+          {
+            backgroundColor: theme
+              ? darkColorTheme.primary
+              : darkColorTheme.lightWhite,
+          },
+        ]}
+      >
         <AppText
           style={[
             GlobalCSS.mediumTextRegular,
@@ -89,6 +119,7 @@ const About = props => {
                 : lightColorTheme.blackColor,
             },
           ]}
+          selectable={true}
           title={item.body}
         />
       </View>
@@ -106,12 +137,14 @@ const About = props => {
         },
       ]}
     >
-      <AccordionList
-        list={aboutusQA}
-        header={_head}
-        body={_body}
-        keyExtractor={item => `${item.id}`}
-      />
+      <View style={{ marginBottom: 20 }}>
+        <AccordionList
+          list={aboutusQA}
+          header={_head}
+          body={_body}
+          keyExtractor={item => `${item.id}`}
+        />
+      </View>
     </View>
   );
 };
@@ -120,7 +153,7 @@ const styles = StyleSheet.create({
   header: {
     padding: 10,
     textAlign: 'center',
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.4,
     backgroundColor: '#F7F6E7',
   },
   body: {

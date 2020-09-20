@@ -6,4 +6,5 @@ export default Object.freeze({
   CONTACT_HELPLINE: 'Contact Helpline',
   UNOFFICIAL_DATA: 'Unofficial Data',
   SplashScreen: 'Splash Screen',
+  TERMS_CONDITION: 'Terms & Conditions',
 });

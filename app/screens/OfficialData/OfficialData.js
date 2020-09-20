@@ -117,7 +117,6 @@ const OfficialData = ({ theme }) => {
           const todaysSecondLastObject =
             historyResponse['data']['data'][secondLastIndex];
 
-          console.log(todaysLastObject['day']);
           setTodaysConfirmedCases(
             todaysLastObject['summary']['total'] -
               todaysSecondLastObject['summary']['total'],
@@ -557,14 +556,6 @@ const OfficialData = ({ theme }) => {
           listing={listing}
         />
       </ScrollView>
-      {/* <AdMobBanner
-        bannerSize="banner"
-        adUnitID={Android_Add_Unit} // Test ID, Replace with your-admob-unit-id
-        servePersonalizedAds={false} // true or false
-        onDidFailToReceiveAdWithError={err =>
-          console.log('banner error', err)
-        }
-      /> */}
       <AdMob />
     </View>
   );

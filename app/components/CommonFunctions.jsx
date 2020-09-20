@@ -31,7 +31,6 @@ export function numberWithCommas(x) {
 export function gettingTime(timeStamp) {
   const givenTime = Date.parse(timeStamp);
   return tConvert(new Date(givenTime).toLocaleTimeString());
-  // console.log(format(new Date(timeStamp).getDate(), 'MMMMMMM'))
 }
 
 export function gettingDate(timeStamp, formattedDate) {

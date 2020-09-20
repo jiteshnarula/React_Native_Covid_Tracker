@@ -32,7 +32,6 @@ export default function App() {
   );
   useEffect(() => {
     const timeoutHandle = setTimeout(function() {
-      console.log('hello');
       setComponent(<AppNavigator />);
       return () => {
         clearTimeout(timeoutHandle);

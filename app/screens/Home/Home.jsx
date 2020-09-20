@@ -243,9 +243,6 @@ const Home = ({ theme }) => {
       );
     });
   };
-  const handleAddError = err => {
-    console.log(err);
-  };
 
   if (showCatchModal) {
     return (

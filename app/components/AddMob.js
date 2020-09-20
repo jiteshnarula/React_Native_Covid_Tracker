@@ -9,7 +9,6 @@ const AdMob = () => {
   const [height, setHeight] = useState(0);
 
   const handleReceived = () => {
-    console.log('Add received true', showBanner);
     setShowBanner(true);
   };
   return (

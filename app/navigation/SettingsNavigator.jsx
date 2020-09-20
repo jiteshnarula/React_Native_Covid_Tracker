@@ -10,6 +10,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 import routes from './routes';
 import OffcialData from '../screens/OfficialData/OfficialData';
 import ContactHelpline from '../screens/ContactHelpline/ContactHelpline';
+import TermsCondition from '../screens/TermsCondition/TermsCondition';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,13 @@ const SettingsNavigator = props => {
       <Stack.Screen
         name="About us"
         component={About}
+        options={{
+          headerTintColor: lightColorTheme.secondary,
+        }}
+      />
+      <Stack.Screen
+        name={routes.TERMS_CONDITION}
+        component={TermsCondition}
         options={{
           headerTintColor: lightColorTheme.secondary,
         }}

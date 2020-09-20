@@ -94,6 +94,29 @@ const Settings = props => {
           />
         </View>
       </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(routes.TERMS_CONDITION)}
+      >
+        <View>
+          <ListItem
+            left={true}
+            leftComponent={
+              <AppText
+                title={routes.TERMS_CONDITION}
+                style={[
+                  GlobalCSS.mediumTextRegular,
+                  {
+                    color: theme
+                      ? darkColorTheme.secondary
+                      : lightColorTheme.blackColor,
+                  },
+                ]}
+              />
+            }
+            right={false}
+          />
+        </View>
+      </TouchableWithoutFeedback>
       <View style={{ position: 'absolute', bottom: 0 }}>
         <AdMob />
       </View>

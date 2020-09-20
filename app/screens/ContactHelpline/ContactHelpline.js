@@ -27,6 +27,7 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import { screenWidth } from '../../contants/widthandheight';
 import AppModal from '../../components/AppModal';
+import AdMob from '../../components/AddMob';
 
 const ContactHelpline = ({ theme }) => {
   const [contactsListing, setContactListing] = useState([]);
@@ -340,7 +341,7 @@ const ContactHelpline = ({ theme }) => {
           }}
         />
       </View>
-      <View>
+      <View style={{ paddingBottom: 50 }}>
         <FlatList
           data={regionalData}
           keyExtractor={regionalData => regionalData.loc}
@@ -389,6 +390,9 @@ const ContactHelpline = ({ theme }) => {
             />
           )}
         />
+      </View>
+      <View>
+        <AdMob />
       </View>
     </View>
   );

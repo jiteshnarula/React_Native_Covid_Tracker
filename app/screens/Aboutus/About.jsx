@@ -17,6 +17,7 @@ import {
 import GlobalCSS from '../../config/globalcss';
 import { lightColorTheme, darkColorTheme } from '../../config/theme';
 import { connect } from 'react-redux';
+import AdMob from '../../components/AddMob';
 
 const About = props => {
   const { theme } = props;
@@ -144,6 +145,9 @@ const About = props => {
           body={_body}
           keyExtractor={item => `${item.id}`}
         />
+      </View>
+      <View style={{ position: 'absolute', bottom: 0 }}>
+        <AdMob />
       </View>
     </View>
   );

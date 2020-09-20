@@ -4,12 +4,7 @@
     "slug": "covid-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
-    "splash": {
-      "image": "./app/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./app/assets/appicon.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -19,6 +14,13 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
+    },
+    "android": {
+      "package": "com.jiteshnarula.covidtracker",
+      "versionCode": 1,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-7763902047214535~3229481229"
+      }
     }
   }
 }

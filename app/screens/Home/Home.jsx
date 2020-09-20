@@ -24,8 +24,13 @@ import {
   gettingTime,
   gettingDate,
 } from '../../components/CommonFunctions';
-import { AdMobBanner } from 'expo-ads-admob';
 import { Android_Add_Unit } from '../../contants/ads';
+import AdMob from '../../components/AddMob';
+import AppModal from '../../components/AppModal';
+import {
+  screenHeight,
+  screenWidth,
+} from '../../contants/widthandheight';
 
 const Home = ({ theme }) => {
   const [tableData, setTableData] = useState([]);
@@ -37,6 +42,8 @@ const Home = ({ theme }) => {
   const [lastUpdatedTimezone, setLastUpdatedTimezone] = useState('');
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [showBanner, setShowBanner] = useState('false');
+  const [showCatchModal, setShowCatchModal] = useState(false);
 
   const tableHead = [
     'State/U.T.',
@@ -75,6 +82,7 @@ const Home = ({ theme }) => {
       let bool = false;
       let lastUpdated;
       let activeDeltaCases = 0;
+      let activeCases = 0;
 
       stateCodes.map(data => {
         const tempArr = [];
@@ -213,8 +221,8 @@ const Home = ({ theme }) => {
       setTotalTestedCases(sumTested);
       setLastUpdatedTimezone(temp);
     } catch (err) {
+      setShowCatchModal(true);
       console.log('Something went wrong', err);
-      return;
     }
   };
   const handleRefresh = () => {
@@ -235,6 +243,80 @@ const Home = ({ theme }) => {
       );
     });
   };
+  const handleAddError = err => {
+    console.log(err);
+  };
+
+  if (showCatchModal) {
+    return (
+      <View>
+        <AppModal isVisible={true}>
+          <View style={styles.modalContainer}>
+            <View
+              style={[
+                styles.modalContent,
+                {
+                  borderColor: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.primary,
+                },
+                {
+                  backgroundColor: theme
+                    ? darkColorTheme.primary
+                    : lightColorTheme.secondary,
+                },
+              ]}
+            >
+              <AppText
+                title="Something went wrong."
+                style={[
+                  GlobalCss.largeTextRegular,
+                  {
+                    color: theme
+                      ? darkColorTheme.secondary
+                      : lightColorTheme.primary,
+                  },
+                ]}
+              />
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  setShowCatchModal(false);
+                  loadListing(true);
+                }}
+              >
+                <View
+                  style={[
+                    styles.modalButtonContainer,
+                    {
+                      borderColor: theme
+                        ? darkColorTheme.statusBarColor
+                        : lightColorTheme.statusBarColor,
+                    },
+                  ]}
+                >
+                  <AppText
+                    title="Try again"
+                    style={[
+                      styles.buttonStyle,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.primary,
+                        backgroundColor: theme
+                          ? darkColorTheme.primary
+                          : lightColorTheme.secondary,
+                      },
+                    ]}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
+        </AppModal>
+      </View>
+    );
+  }
+
   if (loading) {
     return (
       <View
@@ -260,7 +342,7 @@ const Home = ({ theme }) => {
             {
               color: theme
                 ? darkColorTheme.secondary
-                : lightColorTheme.blackColor,
+                : lightColorTheme.primary,
             },
           ]}
         />
@@ -439,14 +521,7 @@ const Home = ({ theme }) => {
         widthArr={widthArr}
         listing={listing}
       />
-      <AdMobBanner
-        bannerSize="banner"
-        adUnitID={Android_Add_Unit} // Test ID, Replace with your-admob-unit-id
-        servePersonalizedAds={false} // true or false
-        // onDidFailToReceiveAdWithError={() =>
-        //   console.log('banner error')
-        // }
-      />
+      <AdMob />
     </View>
   );
 };
@@ -484,6 +559,31 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 7,
     paddingBottom: 2,
+  },
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(125,125,125,0.8)',
+  },
+  modalContent: {
+    width: screenWidth - 100,
+    height: 200,
+    borderWidth: 2,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalButtonContainer: {
+    position: 'absolute',
+    bottom: 10,
+    right: 0,
+    marginRight: 40,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10,
   },
 });
 

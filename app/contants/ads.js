@@ -1,3 +1,5 @@
-export const App_ID = 'ca-app-pub-7763902047214535~1194027590';
+export const App_ID = 'ca-app-pub-7763902047214535~3229481229';
 export const Android_Add_Unit =
-  'ca-app-pub-7763902047214535/1221129513';
+  'ca-app-pub-7763902047214535/5280929492';
+
+// 'ca-app-pub-3940256099942544/6300978111';

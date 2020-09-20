@@ -25,6 +25,8 @@ import {
   gettingDate,
 } from '../../components/CommonFunctions';
 import { FlatList } from 'react-native-gesture-handler';
+import { screenWidth } from '../../contants/widthandheight';
+import AppModal from '../../components/AppModal';
 
 const ContactHelpline = ({ theme }) => {
   const [contactsListing, setContactListing] = useState([]);
@@ -39,6 +41,7 @@ const ContactHelpline = ({ theme }) => {
   const [email, setEmail] = useState('');
   const [regionalData, setRegionalData] = useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [showCatchModal, setShowCatchModal] = useState(false);
 
   useEffect(() => {
     loadContactListing(true);
@@ -64,10 +67,79 @@ const ContactHelpline = ({ theme }) => {
       }
     } catch (err) {
       console.log('Something went wrong', err);
-      return;
+      setShowCatchModal(true);
     }
   };
 
+  if (showCatchModal) {
+    return (
+      <View>
+        <AppModal isVisible={true}>
+          <View style={styles.modalContainer}>
+            <View
+              style={[
+                styles.modalContent,
+                {
+                  borderColor: theme
+                    ? darkColorTheme.secondary
+                    : lightColorTheme.primary,
+                },
+                {
+                  backgroundColor: theme
+                    ? darkColorTheme.primary
+                    : lightColorTheme.secondary,
+                },
+              ]}
+            >
+              <AppText
+                title="Something went wrong."
+                style={[
+                  GlobalCss.largeTextRegular,
+                  {
+                    color: theme
+                      ? darkColorTheme.secondary
+                      : lightColorTheme.primary,
+                  },
+                ]}
+              />
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  setShowCatchModal(false);
+                  loadContactListing(true);
+                }}
+              >
+                <View
+                  style={[
+                    styles.modalButtonContainer,
+                    {
+                      borderColor: theme
+                        ? darkColorTheme.statusBarColor
+                        : lightColorTheme.statusBarColor,
+                    },
+                  ]}
+                >
+                  <AppText
+                    title="Try again"
+                    style={[
+                      styles.buttonStyle,
+                      {
+                        color: theme
+                          ? darkColorTheme.secondary
+                          : lightColorTheme.primary,
+                        backgroundColor: theme
+                          ? darkColorTheme.primary
+                          : lightColorTheme.secondary,
+                      },
+                    ]}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
+        </AppModal>
+      </View>
+    );
+  }
   if (loading) {
     return (
       <View
@@ -83,9 +155,7 @@ const ContactHelpline = ({ theme }) => {
         <ActivityIndicator
           size="large"
           color={
-            theme
-              ? darkColorTheme.secondary
-              : lightColorTheme.blackColor
+            theme ? darkColorTheme.secondary : lightColorTheme.primary
           }
         />
         <AppText
@@ -95,7 +165,7 @@ const ContactHelpline = ({ theme }) => {
             {
               color: theme
                 ? darkColorTheme.secondary
-                : lightColorTheme.blackColor,
+                : lightColorTheme.primary,
             },
           ]}
         />
@@ -360,6 +430,31 @@ const styles = StyleSheet.create({
   },
   primaryContactItems: {
     alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(125,125,125,0.8)',
+  },
+  modalContent: {
+    width: screenWidth - 100,
+    height: 200,
+    borderWidth: 2,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalButtonContainer: {
+    position: 'absolute',
+    bottom: 10,
+    right: 0,
+    marginRight: 40,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10,
   },
 });
 

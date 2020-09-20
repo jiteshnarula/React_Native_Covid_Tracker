@@ -72,28 +72,22 @@ const CustomTable = ({
 
         const tempArr = [];
         tempArr.push(data);
-        tempArr.push(
-          activeCases <= 0 ? '-' : numberWithCommas(activeCases),
-        );
+        tempArr.push(activeCases <= 0 ? '-' : activeCases);
         tempArr.push(
           districtObj['confirmed'] > 0
-            ? numberWithCommas(districtObj['confirmed'])
+            ? districtObj['confirmed']
             : '-',
         );
         tempArr.push(
           districtObj['recovered'] > 0
-            ? numberWithCommas(districtObj['recovered'])
+            ? districtObj['recovered']
             : '-',
         );
         tempArr.push(
-          districtObj['deceased'] > 0
-            ? numberWithCommas(districtObj['deceased'])
-            : '-',
+          districtObj['deceased'] > 0 ? districtObj['deceased'] : '-',
         );
         tempArr.push(
-          districtObj['tested'] > 0
-            ? numberWithCommas(districtObj['tested'])
-            : '-',
+          districtObj['tested'] > 0 ? districtObj['tested'] : '-',
         );
         tempArr.push(0);
         let activeDeltaCases = 0;
@@ -595,7 +589,10 @@ const CustomTable = ({
             </View>
             {/* table contaner */}
             <View style={{ flex: 1 }}>
-              <ScrollView horizontal={true}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
                 <View style={{ marginBottom: 50 }}>
                   <Table>
                     <Row
@@ -618,7 +615,10 @@ const CustomTable = ({
                       key={districtTableHead}
                     />
                   </Table>
-                  <ScrollView style={styles.dataWrapper}>
+                  <ScrollView
+                    style={styles.dataWrapper}
+                    showsVerticalScrollIndicator={false}
+                  >
                     <Table
                     // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
                     >
@@ -688,7 +688,11 @@ const CustomTable = ({
           <View />
         </View>
       </AppModal>
-      <ScrollView horizontal={true}>
+      <ScrollView
+        horizontal={true}
+        nestedScrollEnabled={true}
+        showsHorizontalScrollIndicator={false}
+      >
         <View>
           <Table
           // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
@@ -716,7 +720,10 @@ const CustomTable = ({
               key={tableHead}
             />
           </Table>
-          <ScrollView style={styles.dataWrapper}>
+          <ScrollView
+            style={styles.dataWrapper}
+            showsVerticalScrollIndicator={false}
+          >
             <Table
             // borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}
             >

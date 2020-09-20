@@ -12,6 +12,7 @@ import RenderSwitch from '../../components/Form/RenderSwitch';
 import { connect } from 'react-redux';
 
 import routes from '../../navigation/routes';
+import AdMob from '../../components/AddMob';
 
 const Settings = props => {
   const { theme, navigation } = props;
@@ -93,6 +94,9 @@ const Settings = props => {
           />
         </View>
       </TouchableWithoutFeedback>
+      <View style={{ position: 'absolute', bottom: 0 }}>
+        <AdMob />
+      </View>
     </View>
   );
 };

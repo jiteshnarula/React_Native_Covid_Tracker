@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import AppText from '../../components/Form/AppText';
 import GlobalCss from '../../config/globalcss';
@@ -15,7 +16,10 @@ const SplashScreen = () => {
 
   return (
     <View style={[GlobalCss.container, styles.parentContianer]}>
-      <Image source={logo} style={{ height: 150, width: 160 }} />
+      <ImageBackground
+        source={logo}
+        style={{ height: 150, width: 160 }}
+      />
       <AppText
         title="Stay at home and break the Virus chain"
         style={[

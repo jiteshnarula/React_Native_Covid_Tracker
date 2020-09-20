@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import XDate from 'xdate';
 import { format, compareAsc, parse } from 'date-fns';
 
 export const saveAsyncData = async (key, value) => {

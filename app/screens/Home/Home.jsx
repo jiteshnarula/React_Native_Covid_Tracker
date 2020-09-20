@@ -24,7 +24,8 @@ import {
   gettingTime,
   gettingDate,
 } from '../../components/CommonFunctions';
-import XDate from 'xdate';
+import { AdMobBanner } from 'expo-ads-admob';
+import { Android_Add_Unit } from '../../contants/ads';
 
 const Home = ({ theme }) => {
   const [tableData, setTableData] = useState([]);
@@ -46,6 +47,12 @@ const Home = ({ theme }) => {
     'Tested',
   ];
   const widthArr = [140, 80, 80, 80, 80, 80];
+
+  // //async function for add
+  // const generateAdd = async () => {
+  //   AdMobBanner.setAdUnitID(Android_Add_Unit)
+  //   await AdMobBanner.requestAdAsync()
+  // }
 
   useEffect(() => {
     loadListing(true);
@@ -431,6 +438,14 @@ const Home = ({ theme }) => {
         tableData={tableData}
         widthArr={widthArr}
         listing={listing}
+      />
+      <AdMobBanner
+        bannerSize="banner"
+        adUnitID={Android_Add_Unit} // Test ID, Replace with your-admob-unit-id
+        servePersonalizedAds={false} // true or false
+        // onDidFailToReceiveAdWithError={() =>
+        //   console.log('banner error')
+        // }
       />
     </View>
   );

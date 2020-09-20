@@ -25,8 +25,9 @@ import {
   gettingTime,
   gettingDate,
 } from '../../components/CommonFunctions';
-import XDate from 'xdate';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Android_Add_Unit } from '../../contants/ads';
+import { AdMobBanner } from 'expo-ads-admob';
 
 const OfficialData = ({ theme }) => {
   const [tableData, setTableData] = useState([]);
@@ -480,6 +481,14 @@ const OfficialData = ({ theme }) => {
         tableData={tableData}
         widthArr={widthArr}
         listing={listing}
+      />
+      <AdMobBanner
+        bannerSize="fullBanner"
+        adUnitID={Android_Add_Unit} // Test ID, Replace with your-admob-unit-id
+        servePersonalizedAds={false} // true or false
+        onDidFailToReceiveAdWithError={err =>
+          console.log('banner error', err)
+        }
       />
     </View>
   );

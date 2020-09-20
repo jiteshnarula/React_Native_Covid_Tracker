@@ -24,7 +24,6 @@ import {
   gettingTime,
   gettingDate,
 } from '../../components/CommonFunctions';
-import XDate from 'xdate';
 import { FlatList } from 'react-native-gesture-handler';
 
 const ContactHelpline = ({ theme }) => {

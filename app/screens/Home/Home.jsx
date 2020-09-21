@@ -50,7 +50,7 @@ const Home = ({ theme }) => {
     'Active',
     'Confirmed',
     'Recovered',
-    'Deaths',
+    'Deceased',
     'Tested',
   ];
   const widthArr = [140, 80, 80, 80, 80, 80];

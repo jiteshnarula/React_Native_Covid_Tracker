@@ -42,7 +42,7 @@ const CustomTable = ({
     'Active',
     'Confirmed',
     'Recovered',
-    'Deaths',
+    'Deceased',
     'Tested',
   ];
   const handleRowDataClick = rowData => {

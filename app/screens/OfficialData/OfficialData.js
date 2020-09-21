@@ -77,7 +77,7 @@ const OfficialData = ({ theme }) => {
     'Active',
     'Confirmed',
     'Recovered',
-    'Deaths',
+    'Deceased',
   ];
   const widthArr = [140, 80, 80, 80, 80];
   useEffect(() => {
@@ -410,7 +410,7 @@ const OfficialData = ({ theme }) => {
                         : lightColorTheme.deathsColor,
                     },
                   ]}
-                  title="Deaths"
+                  title="Deceased"
                 />
                 <AppText
                   style={[
@@ -507,7 +507,7 @@ const OfficialData = ({ theme }) => {
                         : lightColorTheme.deathsColor,
                     },
                   ]}
-                  title="Deaths"
+                  title="Deceased"
                 />
                 <AppText
                   style={[

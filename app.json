@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "COVID Tracker",
-    "slug": "covid-tracker",
+    "name": "C Tracker",
+    "slug": "c-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/appicon.png",
@@ -16,10 +16,10 @@
       "favicon": "./app/assets/favicon.png"
     },
     "android": {
-      "package": "com.jiteshnarula.covidtracker",
+      "package": "com.jiteshnarula.ctracker",
       "versionCode": 1,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-7763902047214535~3229481229"
+        "googleMobileAdsAppId": "ca-app-pub-7763902047214535~6335802935"
       }
     }
   }

@@ -16,10 +16,10 @@
       "favicon": "./app/assets/favicon.png"
     },
     "android": {
-      "package": "com.jiteshnarula.ctracker",
+      "package": "com.jiteshnarula.ctracker3",
       "versionCode": 1,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-7763902047214535~6335802935"
+        "googleMobileAdsAppId": "ca-app-pub-7763902047214535~2747640583"
       }
     }
   }
